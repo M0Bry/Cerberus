@@ -1,0 +1,83 @@
+{
+  "dashboard": {
+    "title": "Cerberus AI — Security Alerts",
+    "tags": ["cerberus", "security", "alerts"],
+    "timezone": "browser",
+    "refresh": "5s",
+    "time": { "from": "now-24h", "to": "now" },
+    "panels": [
+      {
+        "id": 1,
+        "title": "Alerts by Severity (24h)",
+        "type": "piechart",
+        "gridPos": { "h": 8, "w": 8, "x": 0, "y": 0 },
+        "targets": [
+          { "expr": "sum(increase(security_alerts_total[24h])) by (severity)", "legendFormat": "{{severity}}" }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "custom": {
+              "color": { "mode": "palette-classic" }
+            }
+          }
+        }
+      },
+      {
+        "id": 2,
+        "title": "Alerts Over Time",
+        "type": "timeseries",
+        "gridPos": { "h": 8, "w": 16, "x": 8, "y": 0 },
+        "targets": [
+          { "expr": "sum(increase(security_alerts_total[1h])) by (severity)", "legendFormat": "{{severity}}" }
+        ]
+      },
+      {
+        "id": 3,
+        "title": "Blocked Attacks (24h)",
+        "type": "stat",
+        "gridPos": { "h": 4, "w": 4, "x": 0, "y": 8 },
+        "targets": [
+          { "expr": "sum(increase(blocked_attacks_total[24h]))" }
+        ],
+        "fieldConfig": { "defaults": { "color": { "fixedColor": "green", "mode": "fixed" } } }
+      },
+      {
+        "id": 4,
+        "title": "Active Incidents",
+        "type": "stat",
+        "gridPos": { "h": 4, "w": 4, "x": 4, "y": 8 },
+        "targets": [
+          { "expr": "count(active_incidents_total)" }
+        ],
+        "fieldConfig": { "defaults": { "thresholds": { "steps": [{ "value": 0, "color": "green" }, { "value": 1, "color": "yellow" }, { "value": 5, "color": "red" }] } } }
+      },
+      {
+        "id": 5,
+        "title": "Defense Tier Activity",
+        "type": "barchart",
+        "gridPos": { "h": 8, "w": 16, "x": 8, "y": 8 },
+        "targets": [
+          { "expr": "sum(increase(defense_tier_requests_total[1h])) by (tier)", "legendFormat": "Tier {{tier}}" }
+        ]
+      },
+      {
+        "id": 6,
+        "title": "Top Blocked IPs",
+        "type": "table",
+        "gridPos": { "h": 8, "w": 24, "x": 0, "y": 16 },
+        "targets": [
+          { "expr": "topk(10, sum(increase(blocked_requests_total[24h])) by (ip))", "legendFormat": "{{ip}}" }
+        ]
+      },
+      {
+        "id": 7,
+        "title": "Virtual Patches Applied",
+        "type": "stat",
+        "gridPos": { "h": 4, "w": 4, "x": 0, "y": 12 },
+        "targets": [
+          { "expr": "sum(virtual_patches_active_total)" }
+        ]
+      }
+    ]
+  }
+}

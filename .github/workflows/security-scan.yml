@@ -1,0 +1,35 @@
+name: Security Scan
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  schedule:
+    - cron: '0 6 * * 1'  # Weekly Monday 6am
+
+jobs:
+  codeql:
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: github/codeql-action/init@v3
+        with:
+          languages: python, javascript
+      - uses: github/codeql-action/analyze@v3
+
+  dependency-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install safety
+      - run: cd backend && safety check -r requirements.txt
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+      - run: cd frontend && npm audit --audit-level=high

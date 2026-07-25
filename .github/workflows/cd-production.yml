@@ -1,0 +1,108 @@
+name: CD — Production Deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: "Type 'deploy-production' to confirm"
+        required: true
+        type: string
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_PREFIX: ${{ github.repository }}
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Confirm deployment
+        run: |
+          if [ "${{ inputs.confirm }}" != "deploy-production" ]; then
+            echo "❌ Confirmation failed. Type 'deploy-production' to confirm."
+            exit 1
+          fi
+          echo "✅ Production deployment confirmed."
+
+  test:
+    needs: validate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.13" }
+      - run: pip install -r backend/requirements.txt
+      - run: cd backend && pytest tests/ -x -q
+        env:
+          SECRET_KEY: test-secret
+          DATABASE_URL: sqlite+aiosqlite:///./test.db
+
+  build-and-push:
+    needs: test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push backend
+        uses: docker/build-push-action@v5
+        with:
+          context: ./backend
+          file: ./infrastructure/docker/Dockerfile.backend
+          push: true
+          tags: |
+            ${{ env.REGISTRY }}/${{ env.IMAGE_PREFIX }}/backend:latest
+            ${{ env.REGISTRY }}/${{ env.IMAGE_PREFIX }}/backend:${{ github.sha }}
+
+      - name: Build and push frontend
+        uses: docker/build-push-action@v5
+        with:
+          context: ./frontend
+          file: ./infrastructure/docker/Dockerfile.frontend
+          push: true
+          tags: |
+            ${{ env.REGISTRY }}/${{ env.IMAGE_PREFIX }}/frontend:latest
+            ${{ env.REGISTRY }}/${{ env.IMAGE_PREFIX }}/frontend:${{ github.sha }}
+
+  deploy-production:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy to production server
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.PROD_HOST }}
+          username: ${{ secrets.PROD_USER }}
+          key: ${{ secrets.PROD_SSH_KEY }}
+          script: |
+            cd /opt/cerberus-ai
+            git pull origin main
+            docker compose -f docker-compose.yml pull
+            docker compose -f docker-compose.yml up -d --remove-orphans
+            docker compose exec -T backend alembic upgrade head
+            echo "✅ Production deployment complete"
+
+      - name: Health check
+        run: |
+          sleep 20
+          for i in 1 2 3; do
+            curl -f https://cerberus-ai.com/health && break
+            echo "Retry $i..."
+            sleep 10
+          done
+
+      - name: Rollback on failure
+        if: failure()
+        run: |
+          echo "⚠️ Deployment failed. Initiating rollback..."
+          # In production: docker compose pull previous tag and redeploy

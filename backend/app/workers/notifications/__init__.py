@@ -1,0 +1,1 @@
+"""notifications worker module."""

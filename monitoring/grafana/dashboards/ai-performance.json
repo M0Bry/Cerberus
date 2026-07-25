@@ -1,0 +1,68 @@
+{
+  "dashboard": {
+    "title": "Cerberus AI — AI Performance",
+    "tags": ["cerberus", "ai", "llm"],
+    "timezone": "browser",
+    "refresh": "30s",
+    "time": { "from": "now-6h", "to": "now" },
+    "panels": [
+      {
+        "id": 1,
+        "title": "AI Request Latency (by provider)",
+        "type": "timeseries",
+        "gridPos": { "h": 8, "w": 12, "x": 0, "y": 0 },
+        "targets": [
+          { "expr": "avg(ai_request_duration_seconds) by (provider)", "legendFormat": "{{provider}}" }
+        ],
+        "fieldConfig": { "defaults": { "unit": "s" } }
+      },
+      {
+        "id": 2,
+        "title": "AI Requests per Hour",
+        "type": "timeseries",
+        "gridPos": { "h": 8, "w": 12, "x": 12, "y": 0 },
+        "targets": [
+          { "expr": "sum(increase(ai_requests_total[1h])) by (task_type)", "legendFormat": "{{task_type}}" }
+        ]
+      },
+      {
+        "id": 3,
+        "title": "AI Error Rate by Provider",
+        "type": "barchart",
+        "gridPos": { "h": 8, "w": 12, "x": 0, "y": 8 },
+        "targets": [
+          { "expr": "sum(ai_errors_total) by (provider)", "legendFormat": "{{provider}}" }
+        ]
+      },
+      {
+        "id": 4,
+        "title": "Token Usage (last 24h)",
+        "type": "stat",
+        "gridPos": { "h": 4, "w": 6, "x": 12, "y": 8 },
+        "targets": [
+          { "expr": "sum(increase(ai_tokens_used_total[24h]))" }
+        ],
+        "fieldConfig": { "defaults": { "unit": "short" } }
+      },
+      {
+        "id": 5,
+        "title": "Active AI Agents",
+        "type": "stat",
+        "gridPos": { "h": 4, "w": 6, "x": 18, "y": 8 },
+        "targets": [
+          { "expr": "count(ai_agent_status == 1)" }
+        ]
+      },
+      {
+        "id": 6,
+        "title": "Provider Fallback Events (24h)",
+        "type": "stat",
+        "gridPos": { "h": 4, "w": 6, "x": 12, "y": 12 },
+        "targets": [
+          { "expr": "sum(increase(ai_provider_fallback_total[24h]))" }
+        ],
+        "fieldConfig": { "defaults": { "thresholds": { "steps": [{ "value": 0, "color": "green" }, { "value": 10, "color": "yellow" }, { "value": 50, "color": "red" }] } } }
+      }
+    ]
+  }
+}

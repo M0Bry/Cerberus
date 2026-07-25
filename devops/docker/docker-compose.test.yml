@@ -1,0 +1,8 @@
+# Testing environment — isolated DB + Redis
+version: "3.9"
+services:
+  postgres:
+    environment:
+      POSTGRES_DB: cerberus_test
+  redis:
+    ports: ["6380:6379"]

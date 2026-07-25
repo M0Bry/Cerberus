@@ -1,0 +1,25 @@
+{
+  "name": "Cerberus AI",
+  "build": {
+    "context": "..",
+    "dockerfile": "Dockerfile"
+  },
+  "workspaceFolder": "/workspace",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "esbenp.prettier-vscode",
+        "ms-python.python",
+        "charliermarsh.ruff",
+        "bradlc.vscode-tailwindcss",
+        "ms-python.black-formatter"
+      ],
+      "settings": {
+        "python.defaultInterpreterPath": "/workspace/backend/.venv/bin/python"
+      }
+    }
+  },
+  "postCreateCommand": "cd /workspace/backend && python -m venv .venv && . .venv/bin/activate && pip install -r requirements.txt && cd ../frontend && npm install",
+  "forwardPorts": [3000, 8000, 5432, 6379],
+  "remoteUser": "vscode"
+}

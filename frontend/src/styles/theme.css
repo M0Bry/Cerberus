@@ -1,0 +1,28 @@
+/* Cerberus AI — CSS Variables for theme switching */
+
+:root {
+  --bg: #03060c;
+  --panel: rgba(10,16,28,0.7);
+  --panel-solid: #0a101c;
+  --border: #152238;
+  --border-strong: rgba(56,142,255,0.45);
+  --text: #e8edf7;
+  --muted: #8493ac;
+  --dim: #5b6a86;
+  --blue: #2f7dfa;
+  --cyan: #22d3ee;
+  --green: #34e0a1;
+  --red: #f4536b;
+  --yellow: #e0b93a;
+}
+
+[data-theme="light"] {
+  --bg: #f0f2f5;
+  --panel: rgba(255,255,255,0.9);
+  --panel-solid: #ffffff;
+  --border: #d0d5dd;
+  --border-strong: rgba(47,125,250,0.5);
+  --text: #1a1a2e;
+  --muted: #667085;
+  --dim: #98a2b3;
+}

@@ -1,0 +1,25 @@
+/** Lazy Pages — Lazy imports for code splitting. */
+import { lazy } from "react";
+export const LazyLandingPage = lazy(() => import("../pages/LandingPage"));
+export const LazyRegisterPage = lazy(() => import("../pages/RegisterPage"));
+export const LazyVerifyEmailPage = lazy(() => import("../pages/VerifyEmailPage"));
+export const LazyLoginPage = lazy(() => import("../pages/LoginPage"));
+export const LazyForgotPasswordPage = lazy(() => import("../pages/ForgotPasswordPage"));
+export const LazyResetPasswordPage = lazy(() => import("../pages/ResetPasswordPage"));
+export const LazyDashboardPage = lazy(() => import("../pages/DashboardPage"));
+export const LazyChatPage = lazy(() => import("../pages/ChatPage"));
+export const LazyScopePage = lazy(() => import("../pages/ScopePage"));
+export const LazyOSINTPage = lazy(() => import("../pages/OSINTPage"));
+export const LazyRedTeamPage = lazy(() => import("../pages/RedTeamPage"));
+export const LazyRiskAssessmentPage = lazy(() => import("../pages/RiskAssessmentPage"));
+export const LazyReportsPage = lazy(() => import("../pages/ReportsPage"));
+export const LazyReportViewPage = lazy(() => import("../pages/ReportViewPage"));
+export const LazyAdminPage = lazy(() => import("../pages/AdminPage"));
+export const LazyMonitoringPage = lazy(() => import("../pages/MonitoringPage"));
+export const LazySettingsPage = lazy(() => import("../pages/SettingsPage"));
+export const LazyNotificationsPage = lazy(() => import("../pages/NotificationsPage"));
+export const LazyPrivacyPolicyPage = lazy(() => import("../pages/PrivacyPolicyPage"));
+export const LazyTermsOfServicePage = lazy(() => import("../pages/TermsOfServicePage"));
+export const LazyLegalCompliancePage = lazy(() => import("../pages/LegalCompliancePage"));
+export const LazyContactPage = lazy(() => import("../pages/ContactPage"));
+export const LazyNotFoundPage = lazy(() => import("../pages/NotFoundPage"));

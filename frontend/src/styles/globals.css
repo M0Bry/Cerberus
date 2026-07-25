@@ -1,0 +1,163 @@
+/* Cerberus AI — Complete Design System (Orbitron + Share Tech Mono) */
+
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Share+Tech+Mono&display=swap');
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #03060c;
+  --panel: rgba(10,16,28,0.7);
+  --panel-solid: #0a101c;
+  --border: #152238;
+  --border-strong: rgba(56,142,255,0.45);
+  --text: #e8edf7;
+  --muted: #8493ac;
+  --dim: #5b6a86;
+  --blue: #2f7dfa;
+  --cyan: #22d3ee;
+  --green: #34e0a1;
+  --red: #f4536b;
+  --yellow: #e0b93a;
+  --font-display: 'Orbitron', 'Share Tech Mono', sans-serif;
+  --font-mono: 'Share Tech Mono', 'Courier New', monospace;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-mono);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── Animations ──────────────────────────────────────────── */
+
+@keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-14px)} }
+@keyframes floatSlow { 0%,100%{transform:translateY(0)} 50%{transform:translateY(10px)} }
+@keyframes pulseRing { 0%{box-shadow:0 0 0 0 rgba(52,224,161,0.5)} 70%{box-shadow:0 0 0 10px rgba(52,224,161,0)} 100%{box-shadow:0 0 0 0 rgba(52,224,161,0)} }
+@keyframes fadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+@keyframes drift { 0%{transform:translate(0,0)} 50%{transform:translate(6px,-8px)} 100%{transform:translate(0,0)} }
+@keyframes expandDown { from{opacity:0;max-height:0;transform:translateY(-6px)} to{opacity:1;max-height:420px;transform:translateY(0)} }
+@keyframes countGlow { 0%,100%{text-shadow:0 0 18px rgba(47,125,250,0.35)} 50%{text-shadow:0 0 28px rgba(34,211,238,0.55)} }
+@keyframes sheen { 0%{transform:translateX(-120%) skewX(-15deg)} 100%{transform:translateX(220%) skewX(-15deg)} }
+@keyframes spin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+
+.fade-up { animation: fadeUp 0.7s ease both; }
+.float-anim { animation: float 5s ease-in-out infinite; }
+.float-anim-slow { animation: floatSlow 6.5s ease-in-out infinite; }
+.drift { animation: drift 7s ease-in-out infinite; }
+.stat-num { animation: countGlow 3s ease-in-out infinite; }
+
+/* ─── Dot Background ──────────────────────────────────────── */
+
+.dot-bg {
+  position: fixed; inset: 0; pointer-events: none; opacity: 0.5; z-index: 0;
+  background-image: radial-gradient(rgba(56,142,255,0.18) 1px, transparent 1px);
+  background-size: 34px 34px;
+}
+
+/* ─── Cards ───────────────────────────────────────────────── */
+
+.cyber-card {
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--panel);
+  padding: 22px 20px;
+  transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
+}
+.cyber-card:hover, .cyber-card.active {
+  border-color: var(--border-strong) !important;
+  box-shadow: 0 0 0 1px rgba(56,142,255,0.2), 0 20px 50px -22px rgba(47,125,250,0.5);
+  transform: translateY(-2px);
+}
+
+.role-card { transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s; cursor: default; }
+.role-card:hover, .role-card.active {
+  border-color: var(--border-strong) !important;
+  box-shadow: 0 0 0 1px rgba(56,142,255,0.2), 0 20px 50px -22px rgba(47,125,250,0.5);
+  transform: translateY(-2px);
+}
+
+.step-card { transition: border-color 0.3s, transform 0.3s; }
+.step-card:hover { border-color: var(--border-strong) !important; transform: translateY(-3px); }
+
+.feature-card { transition: border-color 0.3s, box-shadow 0.3s; }
+.feature-card:hover { border-color: var(--border-strong) !important; box-shadow: 0 16px 40px -20px rgba(47,125,250,0.5); }
+
+.dash-card { transition: border-color 0.2s, transform 0.2s; }
+.dash-card:hover { border-color: var(--border-strong) !important; transform: translateY(-2px); }
+
+.detail-panel { overflow: hidden; animation: expandDown 0.45s ease both; }
+
+/* ─── Navigation ──────────────────────────────────────────── */
+
+.nav-link { transition: color 0.2s; cursor: pointer; }
+.nav-link:hover { color: var(--cyan) !important; }
+
+.side-link { transition: background 0.2s, color 0.2s; }
+.side-link:hover { background: rgba(47,125,250,0.08); color: var(--text) !important; }
+
+/* ─── Inputs ──────────────────────────────────────────────── */
+
+.field-input {
+  width: 100%;
+  background: rgba(4,8,16,0.7);
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  padding: 12px 14px;
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 13.5px;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.field-input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(47,125,250,0.15); }
+.field-input::placeholder { color: var(--dim); }
+
+.otp-input {
+  width: 52px; height: 60px; text-align: center; font-size: 24px;
+  font-family: var(--font-display);
+  background: rgba(4,8,16,0.7);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--cyan);
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.otp-input:focus { border-color: var(--cyan); box-shadow: 0 0 0 3px rgba(34,211,238,0.18); }
+
+/* ─── Buttons ─────────────────────────────────────────────── */
+
+.cta-btn {
+  background: linear-gradient(90deg, #1a5fd8 0%, #2f8ffa 100%);
+  box-shadow: 0 1px 0 rgba(255,255,255,0.2) inset, 0 8px 20px -8px rgba(26,92,224,0.7);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 13px 26px;
+  font-size: 14.5px;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  cursor: pointer;
+  transition: filter 0.2s;
+}
+.cta-btn:hover { filter: brightness(1.07); }
+.cta-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+.sheen { position: relative; overflow: hidden; }
+.sheen::after {
+  content: ''; position: absolute; top: 0; left: 0; width: 40%; height: 100%;
+  background: linear-gradient(120deg, transparent, rgba(255,255,255,0.55), transparent);
+  transform: translateX(-120%) skewX(-15deg);
+  pointer-events: none;
+}
+.sheen:hover::after { animation: sheen 0.85s ease; }
+
+/* ─── Scrollbar ───────────────────────────────────────────── */
+
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: #050510; }
+::-webkit-scrollbar-thumb { background: #303040; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #505060; }
+
+::selection { background: rgba(47,125,250,0.35); }

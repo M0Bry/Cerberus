@@ -1,0 +1,12 @@
+title: Suspicious Login Attempt
+status: experimental
+logsource:
+    category: authentication
+detection:
+    selection:
+        action: login
+        status: failed
+    condition: selection
+    timeframe: 5m
+    threshold: 5
+level: high

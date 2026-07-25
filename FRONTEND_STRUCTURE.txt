@@ -1,0 +1,302 @@
+src/
+├── main.tsx                                    # Entry point + React Query Provider + Router
+├── App.tsx                                     # Root App + Error Boundary + Providers
+├── vite-env.d.ts                               # Vite environment types
+│
+├── api/                                        # API service functions (axios instances)
+│   ├── axiosInstance.ts                        # JWT interceptors + refresh token queuing
+│   ├── axiosAuth.ts                            # Unauthenticated endpoints (login/register)
+│   ├── authApi.ts                              # Register / Login / Logout / Verify / Resend / Refresh
+│   ├── userApi.ts                              # Profile / Update / Upload avatar / Delete account
+│   ├── chatApi.ts                              # AI Chat (POST messages, SSE stream, history)
+│   ├── scopeApi.ts                             # Scope document (create, get, confirm, update)
+│   ├── osintApi.ts                             # OSINT tasks (start, status, results, export)
+│   ├── redTeamApi.ts                           # Red Team (attack plan, vuln scan, evidence)
+│   ├── riskApi.ts                              # Risk assessment (matrix, scores, remediation)
+│   ├── reportApi.ts                            # Reports (generate, list, download PDF)
+│   ├── adminApi.ts                             # Admin endpoints (users, engagements, system health)
+│   ├── monitoringApi.ts                        # Monitoring (alerts, health, incidents, blocked IPs)
+│   ├── notificationApi.ts                      # Notifications (list, mark read, preferences)
+│   ├── landingApi.ts                           # Public endpoints (stats, contact)
+│   └── healthApi.ts                            # System health check (public + protected)
+│
+├── assets/                                     # Static assets
+│   ├── fonts/
+│   │   ├── Inter-Variable.woff2
+│   │   └── JetBrainsMono-Variable.woff2
+│   ├── images/
+│   │   ├── cerberus-logo-glow.svg
+│   │   ├── cerberus-hero-3d.png
+│   │   ├── network-visualization.webp
+│   │   ├── hero-particles-bg.mp4
+│   │   ├── avatars/
+│   │   │   └── default-avatar.png
+│   │   └── icons/
+│   │       ├── osint-icon.svg
+│   │       ├── redteam-icon.svg
+│   │       ├── risk-icon.svg
+│   │       ├── report-icon.svg
+│   │       └── shield-check-icon.svg
+│   ├── lottie/
+│   │   ├── loading-cerberus.json
+│   │   ├── success-check.json
+│   │   └── security-scan.json
+│   └── screenshots/
+│       └── .gitkeep
+│
+├── components/                                 # Reusable UI components
+│   ├── ui/                                     # Design System primitives
+│   │   ├── index.ts                            # Barrel export for all UI components
+│   │   ├── Avatar.tsx                          # User avatar with fallback initials
+│   │   ├── Badge.tsx                           # Status badges (pending, verified, active, completed)
+│   │   ├── Button.tsx                          # Primary / Secondary / Ghost / Danger variants
+│   │   ├── Card.tsx                            # Card base with hover glow + lift
+│   │   ├── ChartCard.tsx                       # Card wrapping a chart (recharts)
+│   │   ├── CodeBlock.tsx                       # Syntax highlighted code block (PoC evidence)
+│   │   ├── CopyButton.tsx                      # Copy text to clipboard
+│   │   ├── CountUp.tsx                         # Animated number counter (stats)
+│   │   ├── DataTable.tsx                       # Table with sorting, pagination, search
+│   │   ├── EmptyState.tsx                      # Empty state (illustration + message)
+│   │   ├── FileUpload.tsx                      # Drag & drop file upload with preview
+│   │   ├── Input.tsx                           # Text input with icon + validation
+│   │   ├── InputOTP.tsx                        # 6-digit OTP input (auto-focus + paste)
+│   │   ├── Modal.tsx                           # Dialog / Modal + overlay + animations
+│   │   ├── PasswordInput.tsx                   # Password input with show/hide toggle
+│   │   ├── ProgressBar.tsx                     # Progress bar with percentage
+│   │   ├── RiskBadge.tsx                       # Risk level badge (Critical, High, Medium, Low)
+│   │   ├── Select.tsx                          # Dropdown select
+│   │   ├── SeverityChip.tsx                    # Severity chip with color
+│   │   ├── Skeleton.tsx                        # Skeleton loaders
+│   │   ├── StatusIndicator.tsx                 # Online/offline/pending dot + label
+│   │   ├── Stepper.tsx                         # Step indicator (Register → Verify → Login)
+│   │   ├── TextArea.tsx                        # Textarea with auto-resize
+│   │   ├── Timeline.tsx                        # Timeline (audit logs, incidents)
+│   │   ├── Toast.tsx                           # Toast notifications + ToastProvider
+│   │   └── Tooltip.tsx                         # Tooltip with arrow + delay
+│   │
+│   ├── layout/                                 # Layout components
+│   │   ├── Navbar.tsx                          # Top navigation bar (glassmorphism)
+│   │   ├── Footer.tsx                          # Footer (links, policies, social)
+│   │   ├── Sidebar.tsx                         # Dashboard sidebar (collapsible)
+│   │   ├── DashboardLayout.tsx                 # Sidebar + Header + Content
+│   │   ├── AuthLayout.tsx                      # Centered card layout (login/register)
+│   │   ├── LandingLayout.tsx                   # Full-width + transparent nav
+│   │   └── PageTransition.tsx                  # Animation wrapper for page transitions
+│   │
+│   ├── common/                                 # Shared components
+│   │   ├── CerberusLogo.tsx                    # Cerberus logo with glow
+│   │   ├── LoadingScreen.tsx                   # Full-screen loading animation
+│   │   ├── ParticleBackground.tsx              # Dot pattern background
+│   │   └── InitializationProgress.tsx          # Assessment initialization steps
+│   │
+│   ├── animations/                             # Animation components
+│   │   ├── Network3D.tsx                       # 3D network visualization (hero)
+│   │   ├── TypingEffect.tsx                    # Typewriter effect for hero text
+│   │   ├── FadeIn.tsx                          # Fade in on scroll
+│   │   ├── SlideUp.tsx                         # Slide up on scroll
+│   │   ├── StaggerContainer.tsx                # Stagger children animations
+│   │   ├── GlowEffect.tsx                      # Blue glow on hover
+│   │   ├── CrossoverGradient.tsx               # Moving gradient hover
+│   │   ├── ScrollReveal.tsx                    # Reveal on scroll (Intersection Observer)
+│   │   ├── LogoGlow.tsx                        # Logo with pulsing glow
+│   │   ├── PulseRing.tsx                       # Pulsing ring (status indicators)
+│   │   ├── CounterAnimation.tsx                # Animated counting (stats)
+│   │   └── SmoothScroll.tsx                    # Smooth scroll wrapper
+│   │
+│   ├── forms/                                  # Form components
+│   │   ├── FormField.tsx                       # Label + input + error wrapper
+│   │   ├── RegisterForm.tsx                    # Registration form (all PDF fields)
+│   │   ├── LoginForm.tsx                       # Login form (email + password + remember)
+│   │   ├── VerifyOTPForm.tsx                   # 6-digit OTP + countdown + resend
+│   │   ├── ProfileForm.tsx                     # Edit profile form
+│   │   ├── ScopeForm.tsx                       # Scope input (domains, IPs, assets)
+│   │   ├── ContactForm.tsx                     # Contact form (landing page)
+│   │   └── DigitalSignatureDialog.tsx          # Digital signature with paste-prevention
+│   │
+│   ├── chat/                                   # AI Chat components
+│   │   ├── ChatContainer.tsx                   # Main chat container
+│   │   ├── ChatMessageBubble.tsx               # Message bubble (user vs AI)
+│   │   ├── ChatInput.tsx                       # Input with send + file attach
+│   │   ├── ChatSuggestions.tsx                 # Quick suggestion chips
+│   │   ├── ChatTypingIndicator.tsx             # "AI is typing..." dots
+│   │   ├── ChatHeader.tsx                      # Chat header (session info)
+│   │   ├── ChatSidebar.tsx                     # Past conversations list
+│   │   ├── ChatWelcome.tsx                     # First-time AI greeting
+│   │   ├── ChatScopeCard.tsx                   # Scope summary card in chat
+│   │   ├── ChatPhaseSelector.tsx               # Phase selection buttons
+│   │   ├── ChatConfirmation.tsx                # Yes / No / Clarify buttons
+│   │   └── ChatStreamingText.tsx               # Streaming text animation
+│   │
+│   ├── landing/                                # Landing page sections
+│   │   ├── HeroSection.tsx                     # Hero (3D network + particles + CTA)
+│   │   ├── StatsSection.tsx                    # Animated counters
+│   │   ├── FeaturesSection.tsx                 # Feature cards (hover glow)
+│   │   ├── AboutSection.tsx                    # How it works + who can use
+│   │   ├── ArchitectureSection.tsx             # Unique architecture description
+│   │   ├── TestimonialsSection.tsx             # Client testimonials
+│   │   ├── CTASection.tsx                      # Final CTA button
+│   │   └── LandingFooter.tsx                   # Footer with nav links
+│   │
+│   ├── osint/                                  # OSINT Dashboard components
+│   │   ├── OSINTDashboard.tsx                  # Overview + status + progress
+│   │   ├── OSINTProgress.tsx                   # Module progress tracker
+│   │   ├── OSINTExportButton.tsx               # Export results (JSON/CSV)
+│   │   ├── DomainEnumCard.tsx                  # Domain enumeration results
+│   │   ├── DNSRecordCard.tsx                   # DNS records display
+│   │   ├── WHOISCard.tsx                       # WHOIS lookup results
+│   │   ├── SubdomainTable.tsx                  # Subdomain enumeration table
+│   │   ├── EmailHarvestCard.tsx                # Email harvesting results
+│   │   ├── SocialReconCard.tsx                 # Social media reconnaissance
+│   │   └── AssetInventoryTable.tsx             # Discovered assets inventory
+│   │
+│   ├── redteam/                                # Red Team components
+│   │   ├── RedTeamDashboard.tsx                # Red Team operations overview
+│   │   ├── AttackPathVisualizer.tsx            # Attack path graph
+│   │   ├── VulnScanResults.tsx                 # Vulnerability scan results
+│   │   ├── ExploitationPanel.tsx               # Controlled exploitation + PoC
+│   │   ├── EvidenceGallery.tsx                 # Screenshots, logs, captures
+│   │   ├── AttackTimeline.tsx                  # Attack timeline visualization
+│   │   ├── RollbackStatus.tsx                  # Rollback / cleanup status
+│   │   ├── RedLineIndicator.tsx                # Boundaries not crossed
+│   │   └── PoCDetailModal.tsx                  # Proof of Concept detail modal
+│   │
+│   ├── risk/                                   # Risk Assessment components
+│   │   ├── RiskMatrix.tsx                      # Risk matrix heatmap
+│   │   ├── RiskScoreCard.tsx                   # Overall risk score gauge
+│   │   ├── RiskFindingsList.tsx                # Findings with risk ratings
+│   │   ├── RiskRemediationTable.tsx            # Remediation roadmap
+│   │   ├── BusinessImpactChart.tsx             # Business impact analysis
+│   │   └── RiskReportPreview.tsx               # Risk assessment preview
+│   │
+│   ├── reports/                                # Report components
+│   │   ├── ReportList.tsx                      # List of generated reports
+│   │   ├── ReportViewer.tsx                    # Interactive report viewer
+│   │   ├── ExecutiveSummary.tsx                # Executive summary section
+│   │   ├── TechnicalFindings.tsx               # Technical findings with evidence
+│   │   ├── RemediationTimeline.tsx             # Remediation timeline chart
+│   │   ├── ComplianceMapping.tsx               # Compliance mapping (GDPR, ISO)
+│   │   ├── ReportDownloadButton.tsx            # Download PDF button
+│   │   └── ReportCharts.tsx                    # Charts for reports
+│   │
+│   ├── admin/                                  # Admin Dashboard components
+│   │   ├── AdminDashboard.tsx                  # Admin overview cards
+│   │   ├── UserManagementTable.tsx             # Users table (CRUD + ban + roles)
+│   │   ├── EngagementManager.tsx               # Engagements table + status
+│   │   ├── SystemHealthPanel.tsx               # System health metrics
+│   │   ├── AuditLogViewer.tsx                  # Audit logs with filters
+│   │   ├── AlertManagement.tsx                 # Security alerts + incidents
+│   │   ├── RoleManager.tsx                     # Role & permission management
+│   │   ├── BillingSubscriptions.tsx            # Billing (future)
+│   │   └── AdminNotifications.tsx              # Admin notification panel
+│   │
+│   ├── monitoring/                             # Monitoring components
+│   │   ├── MonitoringDashboard.tsx             # Real-time monitoring dashboard
+│   │   ├── ActiveAlertsPanel.tsx               # Active security alerts
+│   │   ├── BlockedIPsTable.tsx                 # Blocked / suspicious IPs
+│   │   ├── IncidentTimeline.tsx                # Incident investigation
+│   │   ├── HealthStatusCard.tsx                # Service health (DB, API, Redis)
+│   │   ├── AnomalyDetectionChart.tsx           # Anomaly detection charts
+│   │   ├── RemediationProgress.tsx             # Remediation progress tracker
+│   │   └── AutoDefenseLog.tsx                  # Automated defense actions log
+│   │
+│   └── errors/                                 # Error pages
+│       ├── NotFoundPage.tsx                    # 404
+│       ├── UnauthorizedPage.tsx                # 403
+│       ├── ServerErrorPage.tsx                 # 500
+│       └── MaintenancePage.tsx                 # 503
+│
+├── features/                                   # Feature-based modules
+│   ├── auth/                                   # Authentication feature
+│   │   ├── components/
+│   │   ├── hooks/
+│   │   ├── services/
+│   │   ├── store/
+│   │   ├── types/
+│   │   └── validation/
+│   ├── dashboard/                              # Dashboard feature
+│   │   ├── components/
+│   │   ├── hooks/
+│   │   └── store/
+│   ├── conversation/                           # AI Chat feature
+│   │   ├── components/
+│   │   ├── hooks/
+│   │   └── store/
+│   ├── operations/                             # Live Operations feature
+│   │   ├── components/
+│   │   └── hooks/
+│   ├── assessments/                            # Assessment management
+│   │   ├── components/
+│   │   ├── hooks/
+│   │   └── store/
+│   ├── reports/                                # Report feature
+│   │   ├── components/
+│   │   └── hooks/
+│   ├── profile/                                # Profile & Settings
+│   │   ├── components/
+│   │   └── hooks/
+│   └── admin/                                  # Admin feature
+│       ├── components/
+│       └── hooks/
+│
+├── hooks/                                      # Custom React hooks
+│   ├── useAuth.ts                              # Auth state + login + register + logout
+│   ├── useVerifyEmail.ts                       # OTP verification + resend + countdown
+│   ├── useUserProfile.ts                       # Fetch + update user profile
+│   ├── useChat.ts                              # AI chat (send, streaming, history)
+│   ├── useScope.ts                             # Scope document lifecycle
+│   ├── useOSINT.ts                             # OSINT phase tracking + results
+│   ├── useRedTeam.ts                           # Red Team operations + findings
+│   ├── useRiskAssessment.ts                    # Risk matrix + scores + remediation
+│   ├── useReports.ts                           # Report generation + download + list
+│   ├── useAdmin.ts                             # Admin dashboard data
+│   ├── useMonitoring.ts                        # Real-time monitoring + alerts
+│   ├── useNotifications.ts                     # Notification center + unread count
+│   ├── useSystemHealth.ts                      # Health check + uptime
+│   └── useEngagement.ts                        # Engagement data fetching
+│
+├── lib/                                        # Utilities, helpers, constants
+│   ├── utils.ts                                # cn(), sleep(), debounce(), truncate()
+│   ├── storage.ts                              # Safe localStorage wrapper
+│   ├── logger.ts                               # Client-side logging
+│   └── queryClient.ts                          # TanStack Query configuration
+│
+├── providers/                                  # Context providers
+│   ├── ThemeProvider.tsx                       # Dark/Light/System theme
+│   ├── ToastProvider.tsx                       # Toast notification provider
+│   └── WebSocketProvider.tsx                   # WebSocket for real-time alerts
+│
+├── routes/                                     # Route definitions
+│   ├── AppRouter.tsx                           # Route tree + lazy loading + guards
+│   ├── routeGuards.tsx                         # RequireAuth, RequireAdmin, RequireVerified
+│   └── lazyPages.ts                            # Lazy imports for code splitting
+│
+├── store/                                      # Zustand stores
+│   ├── useAuthStore.ts                         # Auth: user, tokens, isAuthenticated
+│   ├── uiStore.ts                              # UI: theme, sidebar, modal
+│   ├── chatStore.ts                            # Chat: messages, session, scope
+│   ├── scopeStore.ts                           # Scope: draft, confirmed, phases
+│   ├── osintStore.ts                           # OSINT: tasks, findings, progress
+│   ├── redTeamStore.ts                         # RedTeam: operations, findings
+│   ├── riskStore.ts                            # Risk: findings, matrix, scores
+│   ├── notificationStore.ts                    # Notifications: list, unread
+│   └── adminStore.ts                           # Admin: users, engagements, logs
+│
+├── styles/                                     # Styles
+│   ├── globals.css                             # Tailwind directives + CSS variables
+│   ├── theme.css                               # Light/Dark theme variables
+│   └── animations.css                          # Custom keyframes (glow, pulse, fade)
+│
+└── types/                                      # TypeScript definitions
+    ├── index.ts                                # Barrel export for all types
+    ├── user.types.ts                           # User, UserProfile, Role, Status
+    ├── auth.types.ts                           # RegisterPayload, LoginPayload, TokenResponse
+    ├── chat.types.ts                           # ChatMessage, ChatSession, ScopeSummary
+    ├── scope.types.ts                          # ScopeDoc, TargetAsset, InScope, OutOfScope
+    ├── osint.types.ts                          # OSINTTask, Finding, DomainInfo, KnowledgeGraph
+    ├── redTeam.types.ts                        # AttackPlan, Vulnerability, Evidence
+    ├── risk.types.ts                           # RiskFinding, RiskMatrix, RemediationItem
+    ├── report.types.ts                         # Report, ReportSection
+    ├── admin.types.ts                          # AdminUser, AuditLogEntry, SystemMetric
+    ├── monitoring.types.ts                     # Alert, Incident, HealthStatus, BlockedIP
+    ├── notification.types.ts                   # Notification, NotificationPreference
+    └── api.types.ts                            # ApiResponse, PaginatedResponse, ApiError

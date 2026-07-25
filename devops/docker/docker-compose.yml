@@ -1,0 +1,50 @@
+# Full stack — same as root docker-compose.yml
+# See root docker-compose.yml for the primary configuration
+version: "3.9"
+services:
+  frontend:
+    build: ../../frontend
+    container_name: cerberus-frontend
+    ports: ["3000:80"]
+    depends_on: [backend]
+    networks: [cerberus-network]
+  backend:
+    build: ../../backend
+    container_name: cerberus-backend
+    ports: ["8000:8000"]
+    env_file: [../../.env]
+    depends_on: [postgres, redis]
+    networks: [cerberus-network]
+    volumes: [uploads:/app/uploads, reports:/app/reports]
+  celery_worker:
+    build: ../../backend
+    container_name: cerberus-celery-worker
+    command: celery -A app.tasks.celery_app worker --loglevel=info --concurrency=4
+    env_file: [../../.env]
+    depends_on: [postgres, redis]
+    networks: [cerberus-network]
+  postgres:
+    image: postgres:16-alpine
+    container_name: cerberus-postgres
+    environment:
+      POSTGRES_USER: cerberus
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-cerberus_secret}
+      POSTGRES_DB: cerberus_db
+    ports: ["5432:5432"]
+    volumes: [postgres_data:/var/lib/postgresql/data, ../../database/postgres/init:/docker-entrypoint-initdb.d]
+    networks: [cerberus-network]
+  redis:
+    image: redis:7-alpine
+    container_name: cerberus-redis
+    ports: ["6379:6379"]
+    volumes: [../../database/redis/redis.conf:/usr/local/etc/redis/redis.conf, redis_data:/data]
+    command: redis-server /usr/local/etc/redis/redis.conf
+    networks: [cerberus-network]
+volumes:
+  postgres_data: {}
+  redis_data: {}
+  uploads: {}
+  reports: {}
+networks:
+  cerberus-network:
+    driver: bridge

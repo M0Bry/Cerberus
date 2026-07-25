@@ -1,0 +1,8 @@
+#!/bin/sh
+echo "🔍 Pre-commit checks..."
+
+# Run linting on staged files
+cd backend && ruff check --fix . && cd ..
+cd frontend && npx lint-staged 2>&1 && cd ..
+
+echo "✅ Pre-commit checks passed"

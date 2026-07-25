@@ -1,0 +1,13 @@
+name: Docker Build & Push
+on:
+  push:
+    branches: [main]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build backend image
+        run: docker build -t cerberus/backend:latest -f infrastructure/docker/Dockerfile.backend ./backend
+      - name: Build frontend image
+        run: docker build -t cerberus/frontend:latest -f infrastructure/docker/Dockerfile.frontend ./frontend

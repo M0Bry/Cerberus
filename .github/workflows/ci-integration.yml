@@ -1,0 +1,25 @@
+name: CI — Integration Tests
+on:
+  pull_request:
+    branches: [main, develop]
+jobs:
+  integration:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env: { POSTGRES_DB: cerberus_test, POSTGRES_USER: cerberus, POSTGRES_PASSWORD: test_secret }
+        ports: ["5432:5432"]
+      redis:
+        image: redis:7-alpine
+        ports: ["6379:6379"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11" }
+      - run: pip install -r backend/requirements.txt
+      - run: cd backend && pytest tests/integration/ -v
+        env:
+          DATABASE_URL: postgresql+asyncpg://cerberus:test_secret@localhost:5432/cerberus_test
+          REDIS_URL: redis://localhost:6379/0
+          SECRET_KEY: test-secret

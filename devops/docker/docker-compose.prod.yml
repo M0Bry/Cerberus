@@ -1,0 +1,15 @@
+# Production override — replicas, SSL, monitoring
+version: "3.9"
+services:
+  backend:
+    restart: always
+    deploy:
+      replicas: 2
+      resources:
+        limits:
+          cpus: "2.0"
+          memory: 2G
+  frontend:
+    restart: always
+  celery_worker:
+    restart: always

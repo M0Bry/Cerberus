@@ -1,0 +1,25 @@
+global:
+  smtp_smarthost: 'smtp.gmail.com:587'
+  smtp_from: 'alerts@cerberus-ai.com'
+
+route:
+  group_by: ['alertname', 'severity']
+  group_wait: 30s
+  group_interval: 5m
+  repeat_interval: 4h
+  receiver: 'cerberus-team'
+
+  routes:
+    - matchers:
+        - severity = critical
+      receiver: 'cerberus-critical'
+      repeat_interval: 15m
+
+receivers:
+  - name: 'cerberus-team'
+    email_configs:
+      - to: 'team@cerberus-ai.com'
+
+  - name: 'cerberus-critical'
+    email_configs:
+      - to: 'security@cerberus-ai.com'

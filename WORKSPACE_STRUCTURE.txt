@@ -1,0 +1,1574 @@
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                        CERBERUS AI — WORKSPACE STRUCTURE                   ║
+║                     Intelligent Cybersecurity Platform                      ║
+║                          Generated: 2026-07-13                             ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ PROJECT OVERVIEW
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  Cerberus AI is a production-grade, AI-powered penetration testing platform
+  that automates the full security assessment lifecycle using multi-agent AI.
+
+  Tech Stack:
+    Backend:    Python 3.13 · FastAPI 0.139 · SQLAlchemy 2.0 · Celery 5.4
+    Frontend:   React 18.3 · TypeScript 5.8 · Vite 6.3 · Tailwind 3.4
+    Database:   PostgreSQL 17 · Redis 7 · Alembic migrations
+    AI/ML:      DeepSeek · Kimi · Qwen · Z.ai · OpenAI · Anthropic · Ollama
+    Infra:      Docker · Kubernetes · Terraform · Nginx 1.27 · Prometheus · Grafana
+    Plugins:    14 attack categories · 50+ sub-modules · Dynamic plugin loading
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ FILE COUNT SUMMARY (1071 total files)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  .                        19 files   ███
+  .devcontainer             2 files   
+  .github                  10 files   ██
+  .husky                    3 files   
+  .vscode                   5 files   █
+  ai-agents                17 files   ███
+  ai_services             103 files   ████████████████████
+  backend                 339 files   ████████████████████████████████████████
+  benchmarks                1 files   
+  database                  9 files   █
+  datasets                 29 files   █████
+  devops                   43 files   ████████
+  docs                     27 files   █████
+  environments              5 files   █
+  examples                  1 files   
+  frontend                283 files   ████████████████████████████████████████
+  infrastructure            5 files   █
+  monitoring                8 files   █
+  plugins                 111 files   ██████████████████████
+  scripts                  10 files   ██
+  security                 11 files   ██
+  storage                  10 files   ██
+  tools                    20 files   ████
+  ────────────────────── ──────────
+  TOTAL                  1071 files
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ SECTION DESCRIPTIONS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ai-agents/            Standalone AI agent services (Cerberus Agent + XAI)
+                          cerberus_agent/     Main autonomous pentest agent
+                          explainability/     Decision explainability module
+
+  ai_services/          Core AI microservices layer (103 files)
+                          agents/             19 specialized AI agents
+                          llm/                Multi-provider LLM manager (7 providers)
+                          memory/             Agent memory systems (9 modules)
+                          orchestrator/       Multi-agent orchestrator
+                          pipelines/          5 AI pipelines (engagement/osint/report/remediation/vuln)
+                          rag/                RAG system (9 modules)
+                          reasoning/          Chain-of-thought + Tree-of-thought
+                          workflows/          5 workflow definitions
+                          gateway/            API gateway + health checks
+
+  backend/              FastAPI backend application (339 files)
+                          app/                Main application package
+                            ai/               AI engine (memory/models/RAG/sandbox/tools/validators/xAI)
+                            ai_engine/        Defense tiers + attack planning + OSINT + risk
+                            api/              REST API (v1: 17 endpoints + 3 middleware)
+                            core/             Security (encryption, CSRF, audit, abuse detection)
+                            db/               Database (29-table migration, 22 models, 13 repos, 4 seeders)
+                            schemas/          16 Pydantic schema modules
+                            services/         17 business logic services
+                            tasks/            11 Celery task modules
+                            templates/        Email + report HTML templates
+                            utils/            15 utility modules
+                            workers/          10 worker pools
+                          osint_framework/    OSINT framework (4 module dirs + 3 tools)
+                          tests/              Test suite (unit/integration/e2e/API)
+
+  frontend/             React SPA (283 files)
+                          src/api/            15 API service modules
+                          src/components/     UI components (admin/animations/chat/common/forms/landing/
+                                              layout/monitoring/osint/redteam/reports/risk/ui)
+                          src/config/         App configuration
+                          src/contexts/       3 React contexts
+                          src/hooks/          14 custom hooks
+                          src/pages/          27 page components
+                          src/router/         AppRouter + guards + lazy loading
+                          src/store/          9 Zustand stores
+                          src/styles/         CSS (Orbitron + Share Tech Mono theme)
+                          src/types/          13 TypeScript type modules
+                          src/utils/          11 utility modules
+
+  plugins/              Attack plugin system (111 files)
+                          core/               8 core modules (base_attack, attack_result, etc.)
+                          attacks/            14 attack categories:
+                            web/              SQL injection, XSS, file upload
+                            authentication/   JWT, OAuth
+                            network/          SMB, FTP, SSH, SMTP, DNS, LDAP, RDP, VPN, firewall, SSL/TLS
+                            cloud/            AWS, Azure, GCP, IAM, storage, secrets, metadata, K8s
+                            containers/       Docker, K8s, image scan, registry, runtime
+                            operating_system/ Windows, Linux, privilege escalation, kernel, sudo, cron
+                            wireless/         WiFi, Bluetooth, NFC, Zigbee
+                            active_directory/ Kerberos, LDAP, BloodHound, GPO, delegation, trusts, ACL, ADCS
+                            mobile/           Android, iOS, APK, IPA, mobile API
+                            blockchain/       Smart contract, Solidity, wallet, Web3
+                            ai_security/      Prompt injection, agent security
+                            malware_analysis/ Static, dynamic, sandbox, YARA, IOC
+                            phishing/         Email analysis, awareness
+                            compliance/       CIS benchmarks
+                          reports/            Report generation + scoring
+
+  database/             Database configs (PostgreSQL init SQL, Redis config)
+  datasets/             Security datasets (CVE, CWE, CAPEC, MITRE, OWASP, payloads, YARA, Sigma)
+  devops/               DevOps configs (Docker, Kubernetes, Terraform)
+  docs/                 Documentation (architecture, backend, frontend, project, user manual)
+  environments/         Environment configs (.env files)
+  infrastructure/       Infrastructure (Dockerfiles, Nginx)
+  monitoring/           Observability (Prometheus, Grafana dashboards, Loki, Alertmanager)
+  scripts/              Utility scripts (setup, backup, migrate, lint, test, seed)
+  security/             Security policies + compliance mappings
+  storage/              Runtime storage (evidence, reports, logs, uploads)
+  tools/                Security tool wrappers (Nmap, Nuclei, SQLMap)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ COMPLETE FILE TREE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+cerberus-ai/
+├── .commitlintrc
+├── .dockerignore
+├── .editorconfig
+├── .env.example
+├── .gitattributes
+├── .gitignore
+├── CHANGELOG.md
+├── CODE_OF_CONDUCT.md
+├── CONTRIBUTING.md
+├── FILE_TREE.txt
+├── FRONTEND_STRUCTURE.txt
+├── LICENSE.md
+├── Makefile
+├── README.md
+├── ROADMAP.md
+├── SECURITY.md
+├── WORKSPACE_STRUCTURE.txt
+├── docker-compose.override.yml
+├── docker-compose.yml
+├── .devcontainer/
+│   ├── Dockerfile
+│   └── devcontainer.json
+├── .github/
+│   ├── PULL_REQUEST_TEMPLATE.md
+│   ├── issue_templates/
+│   │   ├── bug_report.md
+│   │   └── feature_request.md
+│   └── workflows/
+│       ├── cd-production.yml
+│       ├── cd-staging.yml
+│       ├── ci-integration.yml
+│       ├── ci.yml
+│       ├── dependabot.yml
+│       ├── docker-build.yml
+│       └── security-scan.yml
+├── .husky/
+│   ├── commit-msg
+│   ├── pre-commit
+│   └── pre-push
+├── .vscode/
+│   ├── extensions.json
+│   ├── launch.json
+│   ├── settings.json
+│   ├── snippets.code-snippets
+│   └── tasks.json
+├── ai-agents/
+│   ├── cerberus_agent/
+│   │   ├── Dockerfile
+│   │   ├── agent.py
+│   │   ├── main.py
+│   │   ├── requirements.txt
+│   │   ├── memory/
+│   │   │   ├── redis_memory.py
+│   │   │   └── vector_memory.py
+│   │   ├── sandbox/
+│   │   │   ├── Dockerfile
+│   │   │   ├── sandbox_runner.py
+│   │   │   └── security_policy.yaml
+│   │   └── tools/
+│   │       ├── exploit_toolkit.py
+│   │       ├── osint_toolkit.py
+│   │       └── recon_toolkit.py
+│   └── explainability/
+│       ├── Dockerfile
+│       ├── decision_tree.py
+│       ├── explainer.py
+│       ├── requirements.txt
+│       └── visualizer.py
+├── ai_services/
+│   ├── __init__.py
+│   ├── agents/
+│   │   ├── __init__.py
+│   │   ├── base_agent.py
+│   │   ├── blue_team_agent/
+│   │   │   ├── __init__.py
+│   │   │   └── agent.py
+│   │   ├── compliance_agent/
+│   │   │   ├── __init__.py
+│   │   │   └── agent.py
+│   │   ├── evidence_agent/
+│   │   │   ├── __init__.py
+│   │   │   └── agent.py
+│   │   ├── exploit_agent/
+│   │   │   ├── __init__.py
+│   │   │   └── agent.py
+│   │   ├── intake_agent/
+│   │   │   ├── __init__.py
+│   │   │   └── agent.py
+│   │   ├── memory_agent/
+│   │   │   ├── __init__.py
+│   │   │   └── agent.py
+│   │   ├── osint_agent/
+│   │   │   ├── __init__.py
+│   │   │   └── agent.py
+│   │   ├── planning_agent/
+│   │   │   ├── __init__.py
+│   │   │   └── agent.py
+│   │   ├── reconnaissance_agent/
+│   │   │   ├── __init__.py
+│   │   │   └── agent.py
+│   │   ├── red_team_agent/
+│   │   │   ├── __init__.py
+│   │   │   └── agent.py
+│   │   ├── reflection_agent/
+│   │   │   ├── __init__.py
+│   │   │   └── agent.py
+│   │   ├── remediation_agent/
+│   │   │   ├── __init__.py
+│   │   │   └── agent.py
+│   │   ├── report_agent/
+│   │   │   ├── __init__.py
+│   │   │   └── agent.py
+│   │   ├── risk_assessment_agent/
+│   │   │   ├── __init__.py
+│   │   │   └── agent.py
+│   │   ├── roe_agent/
+│   │   │   ├── __init__.py
+│   │   │   └── agent.py
+│   │   ├── scope_agent/
+│   │   │   ├── __init__.py
+│   │   │   └── agent.py
+│   │   ├── supervisor_agent/
+│   │   │   ├── __init__.py
+│   │   │   └── agent.py
+│   │   ├── threat_intelligence_agent/
+│   │   │   ├── __init__.py
+│   │   │   └── agent.py
+│   │   └── vulnerability_agent/
+│   │       ├── __init__.py
+│   │       └── agent.py
+│   ├── gateway/
+│   │   ├── __init__.py
+│   │   ├── api_gateway.py
+│   │   └── health.py
+│   ├── llm/
+│   │   ├── __init__.py
+│   │   ├── anthropic/
+│   │   │   └── __init__.py
+│   │   ├── fallback/
+│   │   │   └── __init__.py
+│   │   ├── google/
+│   │   │   └── __init__.py
+│   │   ├── local_models/
+│   │   │   └── __init__.py
+│   │   ├── mistral/
+│   │   │   └── __init__.py
+│   │   ├── ollama/
+│   │   │   └── __init__.py
+│   │   ├── openai/
+│   │   │   └── __init__.py
+│   │   ├── provider_manager/
+│   │   │   ├── __init__.py
+│   │   │   └── provider_manager.py
+│   │   └── router/
+│   │       └── __init__.py
+│   ├── memory/
+│   │   ├── __init__.py
+│   │   ├── cache/
+│   │   │   └── __init__.py
+│   │   ├── conversation/
+│   │   │   └── __init__.py
+│   │   ├── embeddings/
+│   │   │   └── __init__.py
+│   │   ├── episodic/
+│   │   │   └── __init__.py
+│   │   ├── indexing/
+│   │   │   └── __init__.py
+│   │   ├── long_term/
+│   │   │   └── __init__.py
+│   │   ├── retrieval/
+│   │   │   └── __init__.py
+│   │   ├── semantic/
+│   │   │   └── __init__.py
+│   │   └── short_term/
+│   │       ├── __init__.py
+│   │       └── memory.py
+│   ├── orchestrator/
+│   │   ├── __init__.py
+│   │   └── orchestrator.py
+│   ├── pipelines/
+│   │   ├── __init__.py
+│   │   ├── engagement_pipeline/
+│   │   │   ├── __init__.py
+│   │   │   └── pipeline.py
+│   │   ├── osint_pipeline/
+│   │   │   └── __init__.py
+│   │   ├── remediation_pipeline/
+│   │   │   └── __init__.py
+│   │   ├── reporting_pipeline/
+│   │   │   └── __init__.py
+│   │   └── vulnerability_pipeline/
+│   │       └── __init__.py
+│   ├── rag/
+│   │   ├── __init__.py
+│   │   ├── chunking/
+│   │   │   └── __init__.py
+│   │   ├── citations/
+│   │   │   └── __init__.py
+│   │   ├── context_builder/
+│   │   │   └── __init__.py
+│   │   ├── embedding/
+│   │   │   └── __init__.py
+│   │   ├── evaluation/
+│   │   │   └── __init__.py
+│   │   ├── indexing/
+│   │   │   └── __init__.py
+│   │   ├── ingestion/
+│   │   │   └── __init__.py
+│   │   ├── reranking/
+│   │   │   └── __init__.py
+│   │   └── retrieval/
+│   │       ├── __init__.py
+│   │       └── retriever.py
+│   ├── reasoning/
+│   │   ├── __init__.py
+│   │   ├── chain_of_thought/
+│   │   │   ├── __init__.py
+│   │   │   └── reasoner.py
+│   │   ├── critic/
+│   │   │   └── __init__.py
+│   │   ├── evaluator/
+│   │   │   └── __init__.py
+│   │   ├── planner/
+│   │   │   └── __init__.py
+│   │   ├── reflection/
+│   │   │   └── __init__.py
+│   │   ├── scoring/
+│   │   │   └── __init__.py
+│   │   ├── tree_of_thought/
+│   │   │   └── __init__.py
+│   │   └── verifier/
+│   │       └── __init__.py
+│   └── workflows/
+│       ├── __init__.py
+│       ├── compliance_review/
+│       │   └── __init__.py
+│       ├── osint/
+│       │   └── __init__.py
+│       ├── penetration_test/
+│       │   ├── __init__.py
+│       │   └── workflow.py
+│       ├── report_generation/
+│       │   └── __init__.py
+│       └── threat_hunting/
+│           └── __init__.py
+├── backend/
+│   ├── .env.example
+│   ├── alembic.ini
+│   ├── celeryconfig.py
+│   ├── entrypoint.sh
+│   ├── gunicorn.conf.py
+│   ├── pyproject.toml
+│   ├── requirements-dev.txt
+│   ├── requirements.txt
+│   ├── app/
+│   │   ├── __init__.py
+│   │   ├── auth.py
+│   │   ├── config.py
+│   │   ├── dependencies.py
+│   │   ├── exceptions.py
+│   │   ├── lifespan.py
+│   │   ├── logging_config.py
+│   │   ├── main.py
+│   │   ├── middleware.py
+│   │   ├── ai/
+│   │   │   ├── __init__.py
+│   │   │   ├── config.py
+│   │   │   ├── engine.py
+│   │   │   ├── memory/
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── context_manager.py
+│   │   │   │   ├── conversation_memory.py
+│   │   │   │   ├── engagement_memory.py
+│   │   │   │   └── vector_store.py
+│   │   │   ├── models/
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── anthropic_client.py
+│   │   │   │   ├── model_router.py
+│   │   │   │   └── openai_client.py
+│   │   │   ├── pipelines/
+│   │   │   │   ├── engagement_pipeline/
+│   │   │   │   │   ├── __init__.py
+│   │   │   │   │   └── pipeline.py
+│   │   │   │   ├── osint_pipeline/
+│   │   │   │   │   ├── __init__.py
+│   │   │   │   │   └── pipeline.py
+│   │   │   │   ├── remediation_pipeline/
+│   │   │   │   │   ├── __init__.py
+│   │   │   │   │   └── pipeline.py
+│   │   │   │   ├── reporting_pipeline/
+│   │   │   │   │   ├── __init__.py
+│   │   │   │   │   └── pipeline.py
+│   │   │   │   └── vulnerability_pipeline/
+│   │   │   │       ├── __init__.py
+│   │   │   │       └── pipeline.py
+│   │   │   ├── prompts/
+│   │   │   │   ├── __init__.py
+│   │   │   │   └── system_prompt.py
+│   │   │   ├── rag/
+│   │   │   │   ├── chunking/
+│   │   │   │   │   ├── __init__.py
+│   │   │   │   │   └── chunker.py
+│   │   │   │   ├── citations/
+│   │   │   │   │   ├── __init__.py
+│   │   │   │   │   └── citation_manager.py
+│   │   │   │   ├── context_builder/
+│   │   │   │   │   ├── __init__.py
+│   │   │   │   │   └── context_builder.py
+│   │   │   │   ├── embedding/
+│   │   │   │   │   ├── __init__.py
+│   │   │   │   │   └── embedder.py
+│   │   │   │   ├── evaluation/
+│   │   │   │   │   ├── __init__.py
+│   │   │   │   │   └── evaluator.py
+│   │   │   │   ├── indexing/
+│   │   │   │   │   ├── __init__.py
+│   │   │   │   │   └── indexer.py
+│   │   │   │   ├── ingestion/
+│   │   │   │   │   ├── __init__.py
+│   │   │   │   │   └── ingestor.py
+│   │   │   │   ├── reranking/
+│   │   │   │   │   ├── __init__.py
+│   │   │   │   │   └── reranker.py
+│   │   │   │   └── retrieval/
+│   │   │   │       ├── __init__.py
+│   │   │   │       └── retriever.py
+│   │   │   ├── sandbox/
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── docker_runner.py
+│   │   │   │   └── network_isolation.py
+│   │   │   ├── tools/
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── exploit_tools.py
+│   │   │   │   ├── monitoring_tools.py
+│   │   │   │   ├── osint_tools.py
+│   │   │   │   ├── recon_tools.py
+│   │   │   │   ├── report_tools.py
+│   │   │   │   └── vuln_scan_tools.py
+│   │   │   ├── validators/
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── hallucination_guard.py
+│   │   │   │   ├── output_filter.py
+│   │   │   │   └── schema_validator.py
+│   │   │   └── xai/
+│   │   │       ├── __init__.py
+│   │   │       ├── decision_explainer.py
+│   │   │       └── evidence_tracer.py
+│   │   ├── ai_engine/
+│   │   │   ├── __init__.py
+│   │   │   ├── conversation.py
+│   │   │   ├── roe_generator.py
+│   │   │   ├── attack_planning/
+│   │   │   │   ├── __init__.py
+│   │   │   │   └── attack_graph.py
+│   │   │   ├── defense/
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── tier1_gateway.py
+│   │   │   │   ├── tier2_behavioral.py
+│   │   │   │   └── tier3_generative.py
+│   │   │   ├── osint/
+│   │   │   │   ├── __init__.py
+│   │   │   │   └── osint_collector.py
+│   │   │   ├── report_generation/
+│   │   │   │   ├── __init__.py
+│   │   │   │   └── report_builder.py
+│   │   │   └── risk_assessment/
+│   │   │       ├── __init__.py
+│   │   │       └── risk_analyzer.py
+│   │   ├── api/
+│   │   │   ├── __init__.py
+│   │   │   ├── deps.py
+│   │   │   ├── gateway/
+│   │   │   │   ├── __init__.py
+│   │   │   │   └── gateway.py
+│   │   │   └── v1/
+│   │   │       ├── __init__.py
+│   │   │       ├── router.py
+│   │   │       ├── endpoints/
+│   │   │       │   ├── __init__.py
+│   │   │       │   ├── admin.py
+│   │   │       │   ├── ai_conversation.py
+│   │   │       │   ├── attack_planning.py
+│   │   │       │   ├── auth.py
+│   │   │       │   ├── dashboard.py
+│   │   │       │   ├── defense.py
+│   │   │       │   ├── documents.py
+│   │   │       │   ├── engagements.py
+│   │   │       │   ├── health.py
+│   │   │       │   ├── monitoring.py
+│   │   │       │   ├── notifications.py
+│   │   │       │   ├── osint.py
+│   │   │       │   ├── public.py
+│   │   │       │   ├── red_team.py
+│   │   │       │   ├── reports.py
+│   │   │       │   ├── risk_assessment.py
+│   │   │       │   ├── rules_of_engagement.py
+│   │   │       │   ├── scope.py
+│   │   │       │   ├── users.py
+│   │   │       │   └── webhooks.py
+│   │   │       └── middleware/
+│   │   │           ├── __init__.py
+│   │   │           ├── defense_middleware.py
+│   │   │           ├── rate_limiter.py
+│   │   │           └── request_logging.py
+│   │   ├── core/
+│   │   │   ├── __init__.py
+│   │   │   ├── abuse_detector.py
+│   │   │   ├── anomaly_detection.py
+│   │   │   ├── audit_logger.py
+│   │   │   ├── auto_defense.py
+│   │   │   ├── config.py
+│   │   │   ├── csrf_protection.py
+│   │   │   ├── encryption.py
+│   │   │   ├── exceptions.py
+│   │   │   ├── immutable_logs.py
+│   │   │   ├── input_validator.py
+│   │   │   ├── ip_logger.py
+│   │   │   ├── permissions.py
+│   │   │   ├── rate_limiter.py
+│   │   │   ├── request_integrity.py
+│   │   │   └── security.py
+│   │   ├── database/
+│   │   │   └── factories/
+│   │   │       ├── __init__.py
+│   │   │       └── user_factory.py
+│   │   ├── db/
+│   │   │   ├── __init__.py
+│   │   │   ├── session.py
+│   │   │   ├── migrations/
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── env.py
+│   │   │   │   ├── script.py.mako
+│   │   │   │   └── versions/
+│   │   │   │       ├── .gitkeep
+│   │   │   │       ├── 0001_initial.py
+│   │   │   │       └── __init__.py
+│   │   │   ├── models/
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── alert.py
+│   │   │   │   ├── attack_path.py
+│   │   │   │   ├── audit_log.py
+│   │   │   │   ├── base.py
+│   │   │   │   ├── conversation.py
+│   │   │   │   ├── digital_signature.py
+│   │   │   │   ├── engagement.py
+│   │   │   │   ├── immutable_log.py
+│   │   │   │   ├── ip_log.py
+│   │   │   │   ├── monitoring.py
+│   │   │   │   ├── notification.py
+│   │   │   │   ├── osint.py
+│   │   │   │   ├── otp.py
+│   │   │   │   ├── report.py
+│   │   │   │   ├── risk_assessment.py
+│   │   │   │   ├── rules_of_engagement.py
+│   │   │   │   ├── scope.py
+│   │   │   │   ├── session.py
+│   │   │   │   ├── uploaded_document.py
+│   │   │   │   ├── user.py
+│   │   │   │   ├── verification.py
+│   │   │   │   └── vulnerability.py
+│   │   │   ├── repositories/
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── audit_log_repo.py
+│   │   │   │   ├── conversation_repo.py
+│   │   │   │   ├── engagement_repo.py
+│   │   │   │   ├── immutable_log_repo.py
+│   │   │   │   ├── ip_log_repo.py
+│   │   │   │   ├── monitoring_repo.py
+│   │   │   │   ├── notification_repo.py
+│   │   │   │   ├── osint_repo.py
+│   │   │   │   ├── red_team_repo.py
+│   │   │   │   ├── report_repo.py
+│   │   │   │   ├── risk_repo.py
+│   │   │   │   ├── scope_repo.py
+│   │   │   │   └── user_repo.py
+│   │   │   └── seeders/
+│   │   │       ├── __init__.py
+│   │   │       ├── seed_admin.py
+│   │   │       ├── seed_alert_rules.py
+│   │   │       ├── seed_permissions.py
+│   │   │       └── seed_roles.py
+│   │   ├── events/
+│   │   │   ├── __init__.py
+│   │   │   └── event_bus.py
+│   │   ├── schemas/
+│   │   │   ├── __init__.py
+│   │   │   ├── admin.py
+│   │   │   ├── ai_conversation.py
+│   │   │   ├── attack_path.py
+│   │   │   ├── auth.py
+│   │   │   ├── dashboard.py
+│   │   │   ├── defense.py
+│   │   │   ├── document.py
+│   │   │   ├── engagement.py
+│   │   │   ├── notification.py
+│   │   │   ├── osint.py
+│   │   │   ├── red_team.py
+│   │   │   ├── report.py
+│   │   │   ├── risk_assessment.py
+│   │   │   ├── rules_of_engagement.py
+│   │   │   ├── scope.py
+│   │   │   └── user.py
+│   │   ├── services/
+│   │   │   ├── __init__.py
+│   │   │   ├── admin_service.py
+│   │   │   ├── ai_conversation_service.py
+│   │   │   ├── attack_planning_service.py
+│   │   │   ├── auth_service.py
+│   │   │   ├── dashboard_service.py
+│   │   │   ├── defense_service.py
+│   │   │   ├── document_service.py
+│   │   │   ├── email_service.py
+│   │   │   ├── engagement_service.py
+│   │   │   ├── notification_service.py
+│   │   │   ├── osint_service.py
+│   │   │   ├── red_team_service.py
+│   │   │   ├── report_service.py
+│   │   │   ├── risk_assessment_service.py
+│   │   │   ├── rules_service.py
+│   │   │   ├── scope_service.py
+│   │   │   └── user_service.py
+│   │   ├── tasks/
+│   │   │   ├── __init__.py
+│   │   │   ├── attack_tasks.py
+│   │   │   ├── backup_tasks.py
+│   │   │   ├── celery_app.py
+│   │   │   ├── cleanup_tasks.py
+│   │   │   ├── document_validation.py
+│   │   │   ├── email_tasks.py
+│   │   │   ├── monitoring_tasks.py
+│   │   │   ├── osint_tasks.py
+│   │   │   ├── red_team_tasks.py
+│   │   │   ├── report_tasks.py
+│   │   │   └── risk_tasks.py
+│   │   ├── templates/
+│   │   │   ├── email/
+│   │   │   │   ├── report_ready.html
+│   │   │   │   └── verification.html
+│   │   │   ├── emails/
+│   │   │   │   ├── alert_email.html
+│   │   │   │   ├── password_reset_email.html
+│   │   │   │   ├── scope_confirmed_email.html
+│   │   │   │   └── welcome_email.html
+│   │   │   └── reports/
+│   │   │       ├── executive_template.html
+│   │   │       ├── finding_detail_template.html
+│   │   │       ├── remediation_timeline_template.html
+│   │   │       ├── risk_matrix_template.html
+│   │   │       └── technical_template.html
+│   │   ├── utils/
+│   │   │   ├── __init__.py
+│   │   │   ├── chart_generator.py
+│   │   │   ├── constants.py
+│   │   │   ├── device_parser.py
+│   │   │   ├── email.py
+│   │   │   ├── encryption_utils.py
+│   │   │   ├── file_storage.py
+│   │   │   ├── formatters.py
+│   │   │   ├── geoip.py
+│   │   │   ├── hash_utils.py
+│   │   │   ├── network_utils.py
+│   │   │   ├── pagination.py
+│   │   │   ├── pdf_generator.py
+│   │   │   ├── user_agent.py
+│   │   │   ├── validators.py
+│   │   │   └── virus_scanner.py
+│   │   └── workers/
+│   │       ├── __init__.py
+│   │       ├── ai/
+│   │       │   └── __init__.py
+│   │       ├── background/
+│   │       │   └── __init__.py
+│   │       ├── celery/
+│   │       │   └── __init__.py
+│   │       ├── cleanup/
+│   │       │   └── __init__.py
+│   │       ├── notifications/
+│   │       │   └── __init__.py
+│   │       ├── redis/
+│   │       │   └── __init__.py
+│   │       ├── reports/
+│   │       │   └── __init__.py
+│   │       ├── scanning/
+│   │       │   └── __init__.py
+│   │       ├── scheduler/
+│   │       │   └── __init__.py
+│   │       └── uploads/
+│   │           └── __init__.py
+│   ├── osint_framework/
+│   │   ├── __init__.py
+│   │   ├── main.py
+│   │   ├── requirements.txt
+│   │   ├── config/
+│   │   │   ├── __init__.py
+│   │   │   ├── api_keys.py
+│   │   │   └── settings.py
+│   │   ├── core/
+│   │   │   ├── __init__.py
+│   │   │   ├── database.py
+│   │   │   ├── engine.py
+│   │   │   └── reporting.py
+│   │   ├── modules/
+│   │   │   ├── analysis/
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── network_graph.py
+│   │   │   │   └── sentiment_analyzer.py
+│   │   │   ├── cybint/
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── domain_intel.py
+│   │   │   │   ├── github_scanner.py
+│   │   │   │   └── shodan_search.py
+│   │   │   ├── darkweb/
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── telegram_monitor.py
+│   │   │   │   └── tor_scraper.py
+│   │   │   └── socmint/
+│   │   │       ├── __init__.py
+│   │   │       ├── image_analyzer.py
+│   │   │       ├── social_scanner.py
+│   │   │       └── username_enum.py
+│   │   ├── plugins/
+│   │   │   ├── __init__.py
+│   │   │   └── plugin_manager.py
+│   │   └── tools/
+│   │       ├── osint_toolkit/
+│   │       │   ├── __init__.py
+│   │       │   └── toolkit.py
+│   │       ├── photon_x/
+│   │       │   ├── __init__.py
+│   │       │   └── photon_x.py
+│   │       └── sherlock_pro/
+│   │           ├── __init__.py
+│   │           └── sherlock_pro.py
+│   ├── scripts/
+│   │   └── create_admin.py
+│   └── tests/
+│       ├── __init__.py
+│       ├── conftest.py
+│       ├── ai_engine/
+│       │   ├── __init__.py
+│       │   └── test_defense.py
+│       ├── api/
+│       │   ├── __init__.py
+│       │   └── test_auth.py
+│       ├── e2e/
+│       │   ├── __init__.py
+│       │   └── test_full_engagement.py
+│       ├── integration/
+│       │   ├── __init__.py
+│       │   ├── test_api_admin.py
+│       │   ├── test_api_auth.py
+│       │   ├── test_api_chat.py
+│       │   ├── test_api_monitoring.py
+│       │   ├── test_api_osint.py
+│       │   ├── test_api_red_team.py
+│       │   ├── test_api_register.py
+│       │   ├── test_api_reports.py
+│       │   ├── test_api_risk.py
+│       │   └── test_api_scope.py
+│       ├── services/
+│       │   ├── __init__.py
+│       │   └── test_auth_service.py
+│       └── unit/
+│           ├── __init__.py
+│           ├── test_ai_prompts.py
+│           ├── test_auth.py
+│           ├── test_encryption.py
+│           ├── test_geoip.py
+│           ├── test_immutability.py
+│           ├── test_rate_limiter.py
+│           └── test_validators.py
+├── benchmarks/
+│   └── README.md
+├── database/
+│   ├── postgres/
+│   │   ├── backups/
+│   │   │   └── .gitkeep
+│   │   ├── init/
+│   │   │   ├── 01_create_extensions.sql
+│   │   │   ├── 02_create_roles.sql
+│   │   │   ├── 03_create_tables.sql
+│   │   │   └── 04_seed_data.sql
+│   │   └── migrations_backup/
+│   │       └── .gitkeep
+│   └── redis/
+│       ├── acl.conf
+│       ├── redis.conf
+│       └── init/
+│           └── 01_seed_cache.lua
+├── datasets/
+│   ├── capec/
+│   │   ├── .gitkeep
+│   │   └── README.md
+│   ├── cve/
+│   │   ├── .gitkeep
+│   │   └── README.md
+│   ├── cwe/
+│   │   ├── .gitkeep
+│   │   └── README.md
+│   ├── mitre/
+│   │   ├── .gitkeep
+│   │   └── README.md
+│   ├── nist/
+│   │   ├── .gitkeep
+│   │   └── README.md
+│   ├── owasp/
+│   │   ├── .gitkeep
+│   │   └── README.md
+│   ├── payloads/
+│   │   ├── .gitkeep
+│   │   ├── README.md
+│   │   ├── sqli_payloads.txt
+│   │   └── xss_payloads.txt
+│   ├── sigma/
+│   │   ├── .gitkeep
+│   │   ├── README.md
+│   │   └── example_rules.yml
+│   ├── signatures/
+│   │   ├── .gitkeep
+│   │   ├── README.md
+│   │   └── web_technologies.json
+│   ├── wordlists/
+│   │   ├── .gitkeep
+│   │   ├── README.md
+│   │   ├── common_directories.txt
+│   │   └── common_subdomains.txt
+│   └── yara/
+│       ├── .gitkeep
+│       ├── README.md
+│       └── example_rules.yar
+├── devops/
+│   ├── docker/
+│   │   ├── docker-compose.dev.yml
+│   │   ├── docker-compose.prod.yml
+│   │   ├── docker-compose.test.yml
+│   │   ├── docker-compose.yml
+│   │   ├── certbot/
+│   │   │   └── init-ssl.sh
+│   │   ├── nginx/
+│   │   │   ├── Dockerfile
+│   │   │   ├── nginx-dev.conf
+│   │   │   ├── nginx.conf
+│   │   │   └── ssl/
+│   │   │       └── .gitkeep
+│   │   └── scripts/
+│   │       ├── backup-db.sh
+│   │       ├── deploy.sh
+│   │       ├── health-check.sh
+│   │       ├── init-db.sh
+│   │       └── restore-db.sh
+│   ├── kubernetes/
+│   │   ├── backend-deployment.yaml
+│   │   ├── backend-service.yaml
+│   │   ├── celery-beat-deployment.yaml
+│   │   ├── celery-worker-deployment.yaml
+│   │   ├── configmap.yaml
+│   │   ├── frontend-deployment.yaml
+│   │   ├── frontend-service.yaml
+│   │   ├── hpa.yaml
+│   │   ├── ingress.yaml
+│   │   ├── namespace.yaml
+│   │   ├── nginx-deployment.yaml
+│   │   ├── nginx-service.yaml
+│   │   ├── postgres-service.yaml
+│   │   ├── postgres-statefulset.yaml
+│   │   ├── redis-deployment.yaml
+│   │   ├── redis-service.yaml
+│   │   └── secrets.yaml
+│   └── terraform/
+│       ├── compute.tf
+│       ├── database.tf
+│       ├── dns.tf
+│       ├── main.tf
+│       ├── monitoring.tf
+│       ├── outputs.tf
+│       ├── provider.tf
+│       ├── redis.tf
+│       ├── ssl.tf
+│       ├── storage.tf
+│       ├── variables.tf
+│       └── vpc.tf
+├── docs/
+│   ├── API.md
+│   ├── ARCHITECTURE.md
+│   ├── architecture/
+│   │   ├── ai_architecture.md
+│   │   ├── api_contract.md
+│   │   ├── data_flow.md
+│   │   ├── deployment_architecture.md
+│   │   ├── security_architecture.md
+│   │   └── system_architecture.md
+│   ├── backend/
+│   │   ├── ai_integration.md
+│   │   ├── api_endpoints.md
+│   │   ├── authentication.md
+│   │   ├── background_tasks.md
+│   │   ├── database_schema.md
+│   │   └── security_mechanism.md
+│   ├── frontend/
+│   │   ├── animation_specs.md
+│   │   ├── color_scheme.md
+│   │   ├── component_guide.md
+│   │   ├── routing.md
+│   │   └── state_management.md
+│   ├── project/
+│   │   ├── changelog.md
+│   │   ├── milestones.md
+│   │   ├── project_plan.md
+│   │   └── risk_assessment.md
+│   └── user_manual/
+│       ├── admin_guide.md
+│       ├── client_guide.md
+│       ├── pentester_guide.md
+│       └── troubleshooting.md
+├── environments/
+│   ├── development.env
+│   ├── docker.env
+│   ├── production.env
+│   ├── staging.env
+│   └── testing.env
+├── examples/
+│   └── README.md
+├── frontend/
+│   ├── .env.example
+│   ├── eslint.config.js
+│   ├── index.html
+│   ├── package.json
+│   ├── postcss.config.js
+│   ├── prettier.config.js
+│   ├── tailwind.config.js
+│   ├── tsconfig.app.json
+│   ├── tsconfig.json
+│   ├── tsconfig.node.json
+│   ├── vite.config.ts
+│   ├── public/
+│   │   ├── favicon-dark.svg
+│   │   ├── favicon.svg
+│   │   ├── manifest.json
+│   │   ├── robots.txt
+│   │   ├── sitemap.xml
+│   │   ├── assets/
+│   │   │   ├── fonts/
+│   │   │   │   ├── Inter-Variable.woff2
+│   │   │   │   └── JetBrainsMono-Variable.woff2
+│   │   │   ├── images/
+│   │   │   │   ├── cerberus-hero-3d.png
+│   │   │   │   ├── cerberus-logo-glow.svg
+│   │   │   │   ├── hero-particles-bg.mp4
+│   │   │   │   ├── network-visualization.webp
+│   │   │   │   ├── avatars/
+│   │   │   │   │   └── default-avatar.png
+│   │   │   │   └── icons/
+│   │   │   │       ├── osint-icon.svg
+│   │   │   │       ├── redteam-icon.svg
+│   │   │   │       ├── report-icon.svg
+│   │   │   │       ├── risk-icon.svg
+│   │   │   │       └── shield-check-icon.svg
+│   │   │   └── lottie/
+│   │   │       ├── loading-cerberus.json
+│   │   │       ├── security-scan.json
+│   │   │       └── success-check.json
+│   │   └── screenshots/
+│   │       └── .gitkeep
+│   └── src/
+│       ├── App.tsx
+│       ├── index.css
+│       ├── main.tsx
+│       ├── vite-env.d.ts
+│       ├── api/
+│       │   ├── adminApi.ts
+│       │   ├── authApi.ts
+│       │   ├── axiosAuth.ts
+│       │   ├── axiosInstance.ts
+│       │   ├── chatApi.ts
+│       │   ├── healthApi.ts
+│       │   ├── landingApi.ts
+│       │   ├── monitoringApi.ts
+│       │   ├── notificationApi.ts
+│       │   ├── osintApi.ts
+│       │   ├── redTeamApi.ts
+│       │   ├── reportApi.ts
+│       │   ├── riskApi.ts
+│       │   ├── scopeApi.ts
+│       │   └── userApi.ts
+│       ├── app/
+│       │   ├── AppProvider.tsx
+│       │   ├── ErrorBoundary.tsx
+│       │   └── QueryProvider.tsx
+│       ├── components/
+│       │   ├── admin/
+│       │   │   ├── AdminDashboard.tsx
+│       │   │   ├── AdminNotifications.tsx
+│       │   │   ├── AlertManagement.tsx
+│       │   │   ├── AuditLogViewer.tsx
+│       │   │   ├── BillingSubscriptions.tsx
+│       │   │   ├── EngagementManager.tsx
+│       │   │   ├── RoleManager.tsx
+│       │   │   ├── SystemHealthPanel.tsx
+│       │   │   └── UserManagementTable.tsx
+│       │   ├── animations/
+│       │   │   ├── CounterAnimation.tsx
+│       │   │   ├── CrossoverGradient.tsx
+│       │   │   ├── FadeIn.tsx
+│       │   │   ├── GlowEffect.tsx
+│       │   │   ├── LogoGlow.tsx
+│       │   │   ├── Network3D.tsx
+│       │   │   ├── PulseRing.tsx
+│       │   │   ├── ScrollReveal.tsx
+│       │   │   ├── SlideUp.tsx
+│       │   │   ├── SmoothScroll.tsx
+│       │   │   ├── StaggerContainer.tsx
+│       │   │   └── TypingEffect.tsx
+│       │   ├── chat/
+│       │   │   ├── ChatConfirmation.tsx
+│       │   │   ├── ChatContainer.tsx
+│       │   │   ├── ChatHeader.tsx
+│       │   │   ├── ChatInput.tsx
+│       │   │   ├── ChatMessageBubble.tsx
+│       │   │   ├── ChatPhaseSelector.tsx
+│       │   │   ├── ChatScopeCard.tsx
+│       │   │   ├── ChatSidebar.tsx
+│       │   │   ├── ChatStreamingText.tsx
+│       │   │   ├── ChatSuggestions.tsx
+│       │   │   ├── ChatTypingIndicator.tsx
+│       │   │   └── ChatWelcome.tsx
+│       │   ├── common/
+│       │   │   ├── CerberusLogo.tsx
+│       │   │   ├── InitializationProgress.tsx
+│       │   │   ├── LoadingScreen.tsx
+│       │   │   └── ParticleBackground.tsx
+│       │   ├── errors/
+│       │   │   ├── MaintenancePage.tsx
+│       │   │   ├── NotFoundPage.tsx
+│       │   │   ├── ServerErrorPage.tsx
+│       │   │   └── UnauthorizedPage.tsx
+│       │   ├── forms/
+│       │   │   ├── ContactForm.tsx
+│       │   │   ├── DigitalSignatureDialog.tsx
+│       │   │   ├── FormField.tsx
+│       │   │   ├── LoginForm.tsx
+│       │   │   ├── ProfileForm.tsx
+│       │   │   ├── RegisterForm.tsx
+│       │   │   ├── ScopeForm.tsx
+│       │   │   └── VerifyOTPForm.tsx
+│       │   ├── landing/
+│       │   │   ├── AboutSection.tsx
+│       │   │   ├── ArchitectureSection.tsx
+│       │   │   ├── CTASection.tsx
+│       │   │   ├── FeaturesSection.tsx
+│       │   │   ├── HeroSection.tsx
+│       │   │   ├── LandingFooter.tsx
+│       │   │   ├── StatsSection.tsx
+│       │   │   └── TestimonialsSection.tsx
+│       │   ├── layout/
+│       │   │   ├── AuthLayout.tsx
+│       │   │   ├── DashboardLayout.tsx
+│       │   │   ├── Footer.tsx
+│       │   │   ├── LandingLayout.tsx
+│       │   │   ├── Navbar.tsx
+│       │   │   ├── PageTransition.tsx
+│       │   │   └── Sidebar.tsx
+│       │   ├── monitoring/
+│       │   │   ├── ActiveAlertsPanel.tsx
+│       │   │   ├── AnomalyDetectionChart.tsx
+│       │   │   ├── AutoDefenseLog.tsx
+│       │   │   ├── BlockedIPsTable.tsx
+│       │   │   ├── HealthStatusCard.tsx
+│       │   │   ├── IncidentTimeline.tsx
+│       │   │   ├── MonitoringDashboard.tsx
+│       │   │   └── RemediationProgress.tsx
+│       │   ├── osint/
+│       │   │   ├── AssetInventoryTable.tsx
+│       │   │   ├── DNSRecordCard.tsx
+│       │   │   ├── DomainEnumCard.tsx
+│       │   │   ├── EmailHarvestCard.tsx
+│       │   │   ├── OSINTDashboard.tsx
+│       │   │   ├── OSINTExportButton.tsx
+│       │   │   ├── OSINTProgress.tsx
+│       │   │   ├── SocialReconCard.tsx
+│       │   │   ├── SubdomainTable.tsx
+│       │   │   └── WHOISCard.tsx
+│       │   ├── redteam/
+│       │   │   ├── AttackPathVisualizer.tsx
+│       │   │   ├── AttackTimeline.tsx
+│       │   │   ├── EvidenceGallery.tsx
+│       │   │   ├── ExploitationPanel.tsx
+│       │   │   ├── PoCDetailModal.tsx
+│       │   │   ├── RedLineIndicator.tsx
+│       │   │   ├── RedTeamDashboard.tsx
+│       │   │   ├── RollbackStatus.tsx
+│       │   │   └── VulnScanResults.tsx
+│       │   ├── reports/
+│       │   │   ├── ComplianceMapping.tsx
+│       │   │   ├── ExecutiveSummary.tsx
+│       │   │   ├── RemediationTimeline.tsx
+│       │   │   ├── ReportCharts.tsx
+│       │   │   ├── ReportDownloadButton.tsx
+│       │   │   ├── ReportList.tsx
+│       │   │   ├── ReportViewer.tsx
+│       │   │   └── TechnicalFindings.tsx
+│       │   ├── risk/
+│       │   │   ├── BusinessImpactChart.tsx
+│       │   │   ├── RiskFindingsList.tsx
+│       │   │   ├── RiskMatrix.tsx
+│       │   │   ├── RiskRemediationTable.tsx
+│       │   │   ├── RiskReportPreview.tsx
+│       │   │   └── RiskScoreCard.tsx
+│       │   └── ui/
+│       │       ├── Avatar.tsx
+│       │       ├── Badge.tsx
+│       │       ├── Button.tsx
+│       │       ├── Card.tsx
+│       │       ├── ChartCard.tsx
+│       │       ├── CodeBlock.tsx
+│       │       ├── CopyButton.tsx
+│       │       ├── CountUp.tsx
+│       │       ├── DataTable.tsx
+│       │       ├── EmptyState.tsx
+│       │       ├── FileUpload.tsx
+│       │       ├── Input.tsx
+│       │       ├── InputOTP.tsx
+│       │       ├── Modal.tsx
+│       │       ├── PasswordInput.tsx
+│       │       ├── ProgressBar.tsx
+│       │       ├── RiskBadge.tsx
+│       │       ├── Select.tsx
+│       │       ├── SeverityChip.tsx
+│       │       ├── Skeleton.tsx
+│       │       ├── StatusIndicator.tsx
+│       │       ├── Stepper.tsx
+│       │       ├── TextArea.tsx
+│       │       ├── Timeline.tsx
+│       │       ├── Toast.tsx
+│       │       ├── Tooltip.tsx
+│       │       └── index.ts
+│       ├── config/
+│       │   ├── api.ts
+│       │   ├── auth.ts
+│       │   ├── environment.ts
+│       │   └── features.ts
+│       ├── contexts/
+│       │   ├── ThemeContext.tsx
+│       │   ├── ToastContext.tsx
+│       │   └── WebSocketContext.tsx
+│       ├── hooks/
+│       │   ├── useAdmin.ts
+│       │   ├── useAuth.ts
+│       │   ├── useChat.ts
+│       │   ├── useEngagement.ts
+│       │   ├── useMonitoring.ts
+│       │   ├── useNotifications.ts
+│       │   ├── useOSINT.ts
+│       │   ├── useRedTeam.ts
+│       │   ├── useReports.ts
+│       │   ├── useRiskAssessment.ts
+│       │   ├── useScope.ts
+│       │   ├── useSystemHealth.ts
+│       │   ├── useUserProfile.ts
+│       │   └── useVerifyEmail.ts
+│       ├── lib/
+│       │   ├── logger.ts
+│       │   ├── queryClient.ts
+│       │   ├── storage.ts
+│       │   └── utils.ts
+│       ├── pages/
+│       │   ├── AdminPage.tsx
+│       │   ├── AssessmentsPage.tsx
+│       │   ├── ChatPage.tsx
+│       │   ├── ContactPage.tsx
+│       │   ├── ConversationPage.tsx
+│       │   ├── DashboardPage.tsx
+│       │   ├── ForgotPasswordPage.tsx
+│       │   ├── LandingPage.tsx
+│       │   ├── LegalCompliancePage.tsx
+│       │   ├── LoginPage.tsx
+│       │   ├── MonitoringPage.tsx
+│       │   ├── NewAssessmentPage.tsx
+│       │   ├── NotFoundPage.tsx
+│       │   ├── NotificationsPage.tsx
+│       │   ├── OSINTPage.tsx
+│       │   ├── OperationsPage.tsx
+│       │   ├── PrivacyPolicyPage.tsx
+│       │   ├── ProfilePage.tsx
+│       │   ├── RedTeamPage.tsx
+│       │   ├── RegisterPage.tsx
+│       │   ├── ReportViewPage.tsx
+│       │   ├── ReportsPage.tsx
+│       │   ├── ResetPasswordPage.tsx
+│       │   ├── RiskAssessmentPage.tsx
+│       │   ├── ScopePage.tsx
+│       │   ├── SettingsPage.tsx
+│       │   ├── TermsOfServicePage.tsx
+│       │   └── VerifyEmailPage.tsx
+│       ├── router/
+│       │   ├── AppRouter.tsx
+│       │   ├── lazyPages.ts
+│       │   └── routeGuards.tsx
+│       ├── services/
+│       │   ├── auth.ts
+│       │   ├── dashboard.ts
+│       │   ├── engagement.ts
+│       │   └── notifications.ts
+│       ├── store/
+│       │   └── useAuthStore.ts
+│       ├── stores/
+│       │   ├── adminStore.ts
+│       │   ├── authStore.ts
+│       │   ├── chatStore.ts
+│       │   ├── notificationStore.ts
+│       │   ├── osintStore.ts
+│       │   ├── redTeamStore.ts
+│       │   ├── riskStore.ts
+│       │   ├── scopeStore.ts
+│       │   └── uiStore.ts
+│       ├── styles/
+│       │   ├── animations.css
+│       │   ├── globals.css
+│       │   └── theme.css
+│       ├── types/
+│       │   ├── admin.types.ts
+│       │   ├── api.types.ts
+│       │   ├── auth.types.ts
+│       │   ├── chat.types.ts
+│       │   ├── index.ts
+│       │   ├── monitoring.types.ts
+│       │   ├── notification.types.ts
+│       │   ├── osint.types.ts
+│       │   ├── redTeam.types.ts
+│       │   ├── report.types.ts
+│       │   ├── risk.types.ts
+│       │   ├── scope.types.ts
+│       │   └── user.types.ts
+│       └── utils/
+│           ├── colors.ts
+│           ├── constants.ts
+│           ├── deviceFingerprint.ts
+│           ├── encryption.ts
+│           ├── fileHelpers.ts
+│           ├── formatters.ts
+│           ├── geolocation.ts
+│           ├── hashVerifier.ts
+│           ├── routes.ts
+│           ├── theme.ts
+│           └── validators.ts
+├── infrastructure/
+│   ├── docker/
+│   │   ├── Dockerfile.backend
+│   │   └── Dockerfile.frontend
+│   └── nginx/
+│       ├── frontend.conf
+│       ├── nginx.conf
+│       └── certs/
+│           └── .gitkeep
+├── monitoring/
+│   ├── alerts/
+│   │   └── alertmanager.yml
+│   ├── grafana/
+│   │   └── dashboards/
+│   │       ├── ai-performance.json
+│   │       ├── api-latency.json
+│   │       ├── cerberus-overview.json
+│   │       ├── security-alerts.json
+│   │       └── system-health.json
+│   ├── loki/
+│   │   └── loki-config.yaml
+│   └── prometheus/
+│       └── prometheus.yml
+├── plugins/
+│   ├── __init__.py
+│   ├── attacks/
+│   │   ├── __init__.py
+│   │   ├── active_directory/
+│   │   │   ├── __init__.py
+│   │   │   ├── base_ad_attack.py
+│   │   │   ├── acl/
+│   │   │   │   └── __init__.py
+│   │   │   ├── adcs/
+│   │   │   │   └── __init__.py
+│   │   │   ├── bloodhound/
+│   │   │   │   └── __init__.py
+│   │   │   ├── delegation/
+│   │   │   │   └── __init__.py
+│   │   │   ├── gpo/
+│   │   │   │   └── __init__.py
+│   │   │   ├── kerberos/
+│   │   │   │   └── __init__.py
+│   │   │   ├── ldap/
+│   │   │   │   └── __init__.py
+│   │   │   └── trusts/
+│   │   │       └── __init__.py
+│   │   ├── ai_security/
+│   │   │   ├── __init__.py
+│   │   │   ├── base_ai_attack.py
+│   │   │   ├── agent_security/
+│   │   │   │   └── __init__.py
+│   │   │   └── prompt_injection/
+│   │   │       └── __init__.py
+│   │   ├── authentication/
+│   │   │   ├── __init__.py
+│   │   │   ├── base_auth_attack.py
+│   │   │   ├── jwt/
+│   │   │   │   └── __init__.py
+│   │   │   └── oauth/
+│   │   │       └── __init__.py
+│   │   ├── blockchain/
+│   │   │   ├── __init__.py
+│   │   │   ├── base_blockchain_attack.py
+│   │   │   ├── smart_contract/
+│   │   │   │   └── __init__.py
+│   │   │   ├── solidity/
+│   │   │   │   └── __init__.py
+│   │   │   ├── wallet/
+│   │   │   │   └── __init__.py
+│   │   │   └── web3/
+│   │   │       └── __init__.py
+│   │   ├── cloud/
+│   │   │   ├── __init__.py
+│   │   │   ├── base_cloud_attack.py
+│   │   │   ├── aws/
+│   │   │   │   └── __init__.py
+│   │   │   ├── azure/
+│   │   │   │   └── __init__.py
+│   │   │   ├── gcp/
+│   │   │   │   └── __init__.py
+│   │   │   ├── iam/
+│   │   │   │   └── __init__.py
+│   │   │   ├── kubernetes/
+│   │   │   │   └── __init__.py
+│   │   │   ├── metadata/
+│   │   │   │   └── __init__.py
+│   │   │   ├── secrets/
+│   │   │   │   └── __init__.py
+│   │   │   └── storage/
+│   │   │       └── __init__.py
+│   │   ├── compliance/
+│   │   │   ├── __init__.py
+│   │   │   ├── base_compliance_check.py
+│   │   │   └── cis/
+│   │   │       └── __init__.py
+│   │   ├── containers/
+│   │   │   ├── __init__.py
+│   │   │   ├── base_container_attack.py
+│   │   │   ├── docker/
+│   │   │   │   └── __init__.py
+│   │   │   ├── image_scan/
+│   │   │   │   └── __init__.py
+│   │   │   ├── kubernetes/
+│   │   │   │   └── __init__.py
+│   │   │   ├── registry/
+│   │   │   │   └── __init__.py
+│   │   │   └── runtime/
+│   │   │       └── __init__.py
+│   │   ├── malware_analysis/
+│   │   │   ├── __init__.py
+│   │   │   ├── base_malware_analysis.py
+│   │   │   ├── dynamic/
+│   │   │   │   └── __init__.py
+│   │   │   ├── ioc/
+│   │   │   │   └── __init__.py
+│   │   │   ├── sandbox/
+│   │   │   │   └── __init__.py
+│   │   │   ├── static/
+│   │   │   │   └── __init__.py
+│   │   │   └── yara/
+│   │   │       └── __init__.py
+│   │   ├── mobile/
+│   │   │   ├── __init__.py
+│   │   │   ├── base_mobile_attack.py
+│   │   │   ├── android/
+│   │   │   │   └── __init__.py
+│   │   │   ├── apk/
+│   │   │   │   └── __init__.py
+│   │   │   ├── ios/
+│   │   │   │   └── __init__.py
+│   │   │   ├── ipa/
+│   │   │   │   └── __init__.py
+│   │   │   └── mobile_api/
+│   │   │       └── __init__.py
+│   │   ├── network/
+│   │   │   ├── __init__.py
+│   │   │   ├── base_network_attack.py
+│   │   │   ├── dns/
+│   │   │   │   └── __init__.py
+│   │   │   ├── firewall/
+│   │   │   │   └── __init__.py
+│   │   │   ├── ftp/
+│   │   │   │   └── __init__.py
+│   │   │   ├── ldap/
+│   │   │   │   └── __init__.py
+│   │   │   ├── rdp/
+│   │   │   │   └── __init__.py
+│   │   │   ├── smb/
+│   │   │   │   └── __init__.py
+│   │   │   ├── smtp/
+│   │   │   │   └── __init__.py
+│   │   │   ├── ssh/
+│   │   │   │   └── __init__.py
+│   │   │   ├── ssl_tls/
+│   │   │   │   └── __init__.py
+│   │   │   └── vpn/
+│   │   │       └── __init__.py
+│   │   ├── operating_system/
+│   │   │   ├── __init__.py
+│   │   │   ├── base_os_attack.py
+│   │   │   ├── cron/
+│   │   │   │   └── __init__.py
+│   │   │   ├── kernel/
+│   │   │   │   └── __init__.py
+│   │   │   ├── linux/
+│   │   │   │   └── __init__.py
+│   │   │   ├── permissions/
+│   │   │   │   └── __init__.py
+│   │   │   ├── privilege_escalation/
+│   │   │   │   └── __init__.py
+│   │   │   ├── registry/
+│   │   │   │   └── __init__.py
+│   │   │   ├── scheduled_tasks/
+│   │   │   │   └── __init__.py
+│   │   │   ├── services/
+│   │   │   │   └── __init__.py
+│   │   │   ├── sudo/
+│   │   │   │   └── __init__.py
+│   │   │   └── windows/
+│   │   │       └── __init__.py
+│   │   ├── phishing/
+│   │   │   ├── __init__.py
+│   │   │   ├── base_phishing_attack.py
+│   │   │   ├── awareness/
+│   │   │   │   └── __init__.py
+│   │   │   └── email_analysis/
+│   │   │       └── __init__.py
+│   │   ├── web/
+│   │   │   ├── __init__.py
+│   │   │   ├── base_web_attack.py
+│   │   │   ├── file_upload/
+│   │   │   │   └── __init__.py
+│   │   │   ├── sql_injection/
+│   │   │   │   └── __init__.py
+│   │   │   └── xss/
+│   │   │       └── __init__.py
+│   │   └── wireless/
+│   │       ├── __init__.py
+│   │       ├── base_wireless_attack.py
+│   │       ├── bluetooth/
+│   │       │   └── __init__.py
+│   │       ├── nfc/
+│   │       │   └── __init__.py
+│   │       ├── wifi/
+│   │       │   └── __init__.py
+│   │       └── zigbee/
+│   │           └── __init__.py
+│   ├── core/
+│   │   ├── __init__.py
+│   │   ├── attack_context.py
+│   │   ├── attack_result.py
+│   │   ├── base_attack.py
+│   │   ├── config_manager.py
+│   │   ├── decorators.py
+│   │   ├── logger.py
+│   │   ├── plugin_manager.py
+│   │   └── utils.py
+│   └── reports/
+│       ├── __init__.py
+│       ├── base_report.py
+│       └── scoring/
+│           └── __init__.py
+├── scripts/
+│   ├── create_backup.sh
+│   ├── generate_keys.py
+│   ├── migrate_db.sh
+│   ├── rotate_secrets.sh
+│   ├── run_lint.sh
+│   ├── run_tests.sh
+│   ├── seed_data.py
+│   ├── setup.sh
+│   ├── setup_dev.sh
+│   └── setup_prod.sh
+├── security/
+│   ├── compliance/
+│   │   ├── ccpa_checklist.md
+│   │   ├── gdpr_checklist.md
+│   │   ├── iso27001_mapping.md
+│   │   ├── pci_dss_mapping.md
+│   │   └── soc2_mapping.md
+│   ├── penetration_tests/
+│   │   ├── internal_pentest_2025.md
+│   │   └── third_party_audit.md
+│   └── policies/
+│       ├── acceptable_use_policy.md
+│       ├── data_processing_agreement.md
+│       ├── responsible_disclosure.md
+│       └── rules_of_engagement.md
+├── storage/
+│   ├── backups/
+│   │   └── .gitkeep
+│   ├── evidence/
+│   │   └── .gitkeep
+│   ├── exports/
+│   │   └── .gitkeep
+│   ├── logs/
+│   │   └── .gitkeep
+│   ├── malware/
+│   │   └── .gitkeep
+│   ├── reports/
+│   │   └── .gitkeep
+│   ├── samples/
+│   │   └── .gitkeep
+│   ├── screenshots/
+│   │   └── .gitkeep
+│   ├── temp/
+│   │   └── .gitkeep
+│   └── uploads/
+│       └── .gitkeep
+└── tools/
+    ├── binaries/
+    │   ├── .gitkeep
+    │   ├── README.md
+    │   └── __init__.py
+    ├── external/
+    │   ├── .gitkeep
+    │   ├── README.md
+    │   └── __init__.py
+    ├── installers/
+    │   ├── .gitkeep
+    │   ├── README.md
+    │   └── install.sh
+    ├── integrations/
+    │   ├── .gitkeep
+    │   ├── README.md
+    │   └── __init__.py
+    ├── sandbox/
+    │   ├── .gitkeep
+    │   ├── README.md
+    │   └── __init__.py
+    └── wrappers/
+        ├── .gitkeep
+        ├── README.md
+        ├── nmap_wrapper.py
+        ├── nuclei_wrapper.py
+        └── sqlmap_wrapper.py

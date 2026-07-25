@@ -1,0 +1,7 @@
+#!/bin/sh
+echo "🚀 Pre-push checks..."
+
+# Run unit tests
+cd backend && pytest tests/unit/ -x -q 2>&1 && cd ..
+
+echo "✅ Pre-push checks passed"

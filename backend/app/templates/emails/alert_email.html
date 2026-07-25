@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"></head>
+<body style="font-family: Arial, sans-serif; background: #0a0a1a; color: #e0e0e0; padding: 20px;">
+<div style="max-width: 600px; margin: 0 auto; background: #1a1a2e; border-radius: 12px; padding: 40px; border: 1px solid rgba(255,59,92,0.3);">
+    <div style="text-align: center; margin-bottom: 30px;">
+        <div style="font-size: 32px;">🛡️</div>
+        <div style="color: #00d4ff; font-size: 24px; font-weight: bold; letter-spacing: 3px;">CERBERUS AI</div>
+    </div>
+    <h2 style="color: #ff3b5c; text-align: center;">⚠️ Security Alert</h2>
+    <div style="background: #0d1117; border: 1px solid #ff3b5c33; border-radius: 8px; padding: 20px; margin: 20px 0;">
+        <h3 style="color: #fff; margin-top: 0;">{{ alert_title }}</h3>
+        <p style="color: #ccc;">{{ alert_description }}</p>
+        <p style="color: #888; font-size: 12px;">Severity: <span style="color: #ff3b5c; font-weight: bold;">{{ severity }}</span></p>
+        <p style="color: #888; font-size: 12px;">Source IP: {{ source_ip }}</p>
+        <p style="color: #888; font-size: 12px;">Time: {{ timestamp }}</p>
+    </div>
+    <p><strong>Automated Actions Taken:</strong></p>
+    <ul style="color: #ccc;">{{ auto_actions }}</ul>
+    <div style="color: #666; font-size: 12px; margin-top: 30px; text-align: center; border-top: 1px solid #333; padding-top: 20px;">
+        <p>Cerberus AI — Intelligent Cybersecurity Platform</p>
+    </div>
+</div>
+</body>
+</html>

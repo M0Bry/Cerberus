@@ -1,0 +1,35 @@
+{
+  "dashboard": {
+    "title": "Cerberus AI — Overview",
+    "tags": ["cerberus", "security"],
+    "panels": [
+      {
+        "title": "API Requests/sec",
+        "type": "graph",
+        "targets": [{ "expr": "rate(http_requests_total[5m])", "legendFormat": "{{method}} {{path}}" }]
+      },
+      {
+        "title": "Response Latency (p95)",
+        "type": "graph",
+        "targets": [{ "expr": "histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m]))" }]
+      },
+      {
+        "title": "Active Engagements",
+        "type": "stat",
+        "targets": [{ "expr": "cerberus_active_engagements" }]
+      },
+      {
+        "title": "Security Alerts (24h)",
+        "type": "stat",
+        "targets": [{ "expr": "increase(cerberus_security_alerts_total[24h])" }]
+      },
+      {
+        "title": "Blocked Attacks (24h)",
+        "type": "stat",
+        "targets": [{ "expr": "increase(cerberus_blocked_attacks_total[24h])" }]
+      }
+    ],
+    "refresh": "10s",
+    "time": { "from": "now-1h", "to": "now" }
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "name": "cerberus-ai-frontend",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "test": "vitest",
+    "format": "prettier --write \"src/**/*.{ts,tsx,css}\""
+  },
+  "dependencies": {
+    "@hookform/resolvers": "^5.0.0",
+    "@tanstack/react-query": "^5.80.0",
+    "axios": "^1.18.1",
+    "clsx": "^2.1.1",
+    "date-fns": "^4.1.0",
+    "framer-motion": "^12.0.0",
+    "lucide-react": "^0.475.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-error-boundary": "^5.0.0",
+    "react-hook-form": "^7.55.0",
+    "react-router-dom": "^7.6.0",
+    "sonner": "^2.0.0",
+    "tailwind-merge": "^3.0.0",
+    "zod": "^3.25.0",
+    "zustand": "^5.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^26.1.1",
+    "@types/react": "^18.3.18",
+    "@types/react-dom": "^18.3.5",
+    "@typescript-eslint/eslint-plugin": "^8.32.0",
+    "@typescript-eslint/parser": "^8.32.0",
+    "@vitejs/plugin-react": "^4.5.0",
+    "autoprefixer": "^10.4.21",
+    "eslint": "^9.27.0",
+    "postcss": "^8.5.4",
+    "prettier": "^3.5.3",
+    "tailwindcss": "^3.4.17",
+    "typescript": "^5.8.3",
+    "vite": "^6.3.0",
+    "vitest": "^3.1.0"
+  }
+}

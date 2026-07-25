@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=75.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cerberus-ai-backend"
+version = "1.0.0"
+description = "Cerberus AI — Intelligent Cybersecurity Platform Backend"
+requires-python = ">=3.11"
+
+[tool.black]
+line-length = 100
+target-version = ["py313"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py313"
+select = ["E", "F", "I", "N", "W", "UP", "B", "SIM"]
+
+[tool.mypy]
+python_version = "3.13"
+strict = false
+ignore_missing_imports = true
+check_untyped_defs = false    # ← silences "annotation‑unchecked" notes
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+python_files = "test_*.py"

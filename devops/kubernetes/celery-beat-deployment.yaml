@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cerberus-celery-beat
+  namespace: cerberus
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cerberus-celery-beat
+  template:
+    metadata:
+      labels:
+        app: cerberus-celery-beat
+    spec:
+      containers:
+        - name: celery-beat
+          image: cerberus/backend:latest
+          command: ["celery", "-A", "app.tasks.celery_app", "beat", "--loglevel=info"]
+          envFrom:
+            - secretRef:
+                name: cerberus-secrets

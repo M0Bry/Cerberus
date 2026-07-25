@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body { font-family: 'Inter', Arial, sans-serif; background: #0a0a1a; color: #e0e0e0; margin: 0; padding: 20px; }
+        .container { max-width: 600px; margin: 0 auto; background: #1a1a2e; border-radius: 12px; padding: 40px; border: 1px solid rgba(0,212,255,0.2); }
+        .header { text-align: center; margin-bottom: 30px; }
+        .logo { font-size: 32px; margin-bottom: 8px; }
+        .brand { color: #00d4ff; font-size: 24px; font-weight: bold; letter-spacing: 3px; }
+        .otp-box { background: #0d1117; border: 2px solid #00d4ff; border-radius: 8px; padding: 20px; text-align: center; margin: 20px 0; }
+        .otp-code { font-size: 36px; font-weight: bold; color: #00d4ff; letter-spacing: 8px; font-family: 'JetBrains Mono', monospace; }
+        .warning { color: #ff6b6b; font-size: 14px; margin-top: 20px; }
+        .footer { color: #666; font-size: 12px; margin-top: 30px; text-align: center; border-top: 1px solid #333; padding-top: 20px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">🛡️</div>
+            <div class="brand">CERBERUS AI</div>
+        </div>
+        <h2 style="color: #fff; text-align: center;">Email Verification</h2>
+        <p>A security verification code has been sent to your registered email address.</p>
+        <p>Please enter the verification code below to activate your account.</p>
+        <div class="otp-box">
+            <div class="otp-code">{{ otp }}</div>
+        </div>
+        <p class="warning">⚠️ This code expires in 5 minutes. Do not share it with anyone.</p>
+        <p>If you did not create an account, please ignore this email.</p>
+        <div class="footer">
+            <p>Cerberus AI — Intelligent Cybersecurity Platform</p>
+            <p>This is an automated message. Please do not reply.</p>
+        </div>
+    </div>
+</body>
+</html>

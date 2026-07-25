@@ -1,0 +1,47 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Share+Tech+Mono&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #03060c;
+  --panel: rgba(10,16,28,0.7);
+  --panel-solid: #0a101c;
+  --border: #152238;
+  --border-strong: rgba(56,142,255,0.45);
+  --text: #e8edf7;
+  --muted: #8493ac;
+  --dim: #5b6a86;
+  --blue: #2f7dfa;
+  --cyan: #22d3ee;
+  --green: #34e0a1;
+  --red: #f4536b;
+  --yellow: #e0b93a;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Share Tech Mono', 'Courier New', monospace;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+@keyframes spin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+@keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-14px)} }
+@keyframes pulseRing { 0%{box-shadow:0 0 0 0 rgba(52,224,161,0.5)} 70%{box-shadow:0 0 0 10px rgba(52,224,161,0)} 100%{box-shadow:0 0 0 0 rgba(52,224,161,0)} }
+@keyframes fadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+@keyframes drift { 0%{transform:translate(0,0)} 50%{transform:translate(6px,-8px)} 100%{transform:translate(0,0)} }
+@keyframes expandDown { from{opacity:0;max-height:0;transform:translateY(-6px)} to{opacity:1;max-height:420px;transform:translateY(0)} }
+@keyframes countGlow { 0%,100%{text-shadow:0 0 18px rgba(47,125,250,0.35)} 50%{text-shadow:0 0 28px rgba(34,211,238,0.55)} }
+@keyframes sheen { 0%{transform:translateX(-120%) skewX(-15deg)} 100%{transform:translateX(220%) skewX(-15deg)} }
+
+.fade-up { animation: fadeUp 0.7s ease both; }
+.float-anim { animation: float 5s ease-in-out infinite; }
+.float-anim-slow { animation: floatSlow 6.5s ease-in-out infinite; }
+.drift { animation: drift 7s ease-in-out infinite; }
+.stat-num { animation: countGlow 3s ease-in-out infinite; }
+.detail-panel { overflow: hidden; animation: expandDown 0.45s ease both; }

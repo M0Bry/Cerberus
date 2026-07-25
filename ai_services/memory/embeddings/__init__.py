@@ -1,0 +1,1 @@
+"""embeddings memory module."""

@@ -1,0 +1,18 @@
+{
+  "servers": {
+    "nginx": {"header": "server", "pattern": "nginx"},
+    "apache": {"header": "server", "pattern": "apache"},
+    "iis": {"header": "server", "pattern": "microsoft-iis"},
+    "cloudflare": {"header": "server", "pattern": "cloudflare"},
+    "gunicorn": {"header": "server", "pattern": "gunicorn"}
+  },
+  "frameworks": {
+    "react": {"patterns": ["react", "reactdom", "_next"]},
+    "angular": {"patterns": ["ng-version", "angular"]},
+    "vue": {"patterns": ["vue.js", "vuejs", "__vue__"]},
+    "django": {"patterns": ["csrfmiddlewaretoken", "django"]},
+    "laravel": {"patterns": ["laravel", "csrf-token"]},
+    "rails": {"patterns": ["rails", "csrf-token"]},
+    "express": {"patterns": ["express", "x-powered-by: Express"]}
+  }
+}

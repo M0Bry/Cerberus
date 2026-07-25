@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cerberus-celery-worker
+  namespace: cerberus
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: cerberus-celery-worker
+  template:
+    metadata:
+      labels:
+        app: cerberus-celery-worker
+    spec:
+      containers:
+        - name: celery-worker
+          image: cerberus/backend:latest
+          command: ["celery", "-A", "app.tasks.celery_app", "worker", "--loglevel=info", "--concurrency=4"]
+          envFrom:
+            - secretRef:
+                name: cerberus-secrets
+            - configMapRef:
+                name: cerberus-config
+          resources:
+            requests:
+              cpu: 500m
+              memory: 512Mi
+            limits:
+              cpu: 2000m
+              memory: 2Gi
