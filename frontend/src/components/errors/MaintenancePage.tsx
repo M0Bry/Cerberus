@@ -1,15 +1,28 @@
-/** 503 Maintenance Page */
+/** 503 Page (new design) — ported from the new front-end's maintenance.html. */
+import { Link } from "react-router-dom";
+import SysPanel from "./SysPanel";
+
 export default function MaintenancePage() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-cerberus-dark">
-      <div className="text-center">
-        <span className="text-6xl">🔧</span>
-        <h1 className="text-4xl font-bold text-cerberus-yellow mt-4">Under Maintenance</h1>
-        <p className="text-gray-400 mt-4 max-w-md mx-auto">
-          Cerberus AI is undergoing scheduled maintenance. We'll be back shortly.
-        </p>
-        <p className="text-sm text-gray-600 mt-8">Expected completion: Check our status page for updates.</p>
-      </div>
-    </div>
+    <SysPanel
+      icon="fa-screwdriver-wrench"
+      tag={
+        <>
+          Error <b>503</b>
+        </>
+      }
+      title="Under Maintenance"
+      sub="Cerberus AI is undergoing scheduled maintenance to improve the platform. We'll be back shortly. Thank you for your patience."
+      actions={
+        <>
+          <a href="/#contact" className="btn btn-primary">
+            <i className="fas fa-headset" /> Contact Support
+          </a>
+          <Link to="/" className="btn btn-outline">
+            <i className="fas fa-house" /> Back to Home
+          </Link>
+        </>
+      }
+    />
   );
 }

@@ -6,6 +6,7 @@ exception handlers, and API routers. It follows a modular architecture
 that allows new features to be added without modifying core logic.
 """
 
+import asyncio
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
@@ -27,8 +28,31 @@ async def lifespan(app: FastAPI):
     # ─── Startup ──────────────────────────────────────────────
     from app.db.session import init_db
     await init_db()
+
+    # Background: keep the DB truthful about expired free trials
+    # (records SUSPENDED accounts every 30 minutes).
+    from app.services.trial_sweep import trial_sweep_loop
+    sweep_task = asyncio.create_task(trial_sweep_loop())
+
+    # Tier 2 Part D: mirror medium/high defense alerts into the
+    # durable audit_log so the defense record survives restarts.
+    # Disabled under pytest: in the test process the app's session
+    # factory targets the configured DB, which must not receive
+    # defense-alert rows from the suite.
+    import os
+
+    persist_task = None
+    _under_pytest = "PYTEST_CURRENT_TEST" in os.environ
+    if settings.ALERT_PERSISTENCE_ENABLED and not _under_pytest:
+        from app.core.alert_persistence import alert_persistence_loop
+
+        persist_task = asyncio.create_task(alert_persistence_loop())
+
     yield
     # ─── Shutdown ─────────────────────────────────────────────
+    sweep_task.cancel()
+    if persist_task is not None:
+        persist_task.cancel()
     await engine.dispose()
 
 

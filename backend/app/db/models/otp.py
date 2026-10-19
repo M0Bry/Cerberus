@@ -26,6 +26,10 @@ class OTPVerification(Base):
     attempts: Mapped[int] = mapped_column(Integer, default=0)
     max_attempts: Mapped[int] = mapped_column(Integer, default=5)
     is_used: Mapped[bool] = mapped_column(Boolean, default=False)
+    # Which flow owns this code: "registration" (email verification) or
+    # "admin_login" (the hardened admin portal's 2FA step). The two flows
+    # never read each other's codes.
+    purpose: Mapped[str] = mapped_column(String(20), default="registration", nullable=False)
 
     # ─── Timestamps ───────────────────────────────────────────
     created_at: Mapped[datetime] = mapped_column(

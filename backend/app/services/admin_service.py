@@ -93,23 +93,83 @@ class AdminService:
         result = await self.db.execute(query)
         users = result.scalars().all()
 
+        # Batch-load paid subscriptions + plan names for this page (2 queries
+        # total, regardless of page size).
+        paid_by_user: dict[str, str | None] = {}
+        if users:
+            from app.db.models.plan import Plan
+            from app.db.models.subscription import Subscription, SubscriptionStatus
+
+            ids = [u.id for u in users]
+            sub_rows = (
+                await self.db.execute(
+                    select(Subscription, Plan.name)
+                    .join(Plan, Plan.id == Subscription.plan_id)
+                    .where(
+                        Subscription.user_id.in_(ids),
+                        Subscription.status.in_(
+                            (
+                                SubscriptionStatus.ACTIVE,
+                                SubscriptionStatus.TRIALING,
+                                SubscriptionStatus.PAST_DUE,
+                            )
+                        ),
+                    )
+                    .order_by(Subscription.created_at.desc())
+                )
+            ).all()
+            for sub, plan_name in sub_rows:
+                paid_by_user.setdefault(sub.user_id, plan_name)
+
         return UserManagementListResponse(
             total=total,
             page=page,
             page_size=page_size,
             items=[
-                AdminUserItem(
-                    id=u.id,
-                    full_name=u.full_name,
-                    email=u.email,
-                    company_name=u.company_name,
-                    role=u.role.value,
-                    status=u.status.value,
-                    created_at=u.created_at,
-                    last_login_at=u.last_login_at,
-                )
+                self._to_admin_user_item(u, paid_by_user.get(u.id))
                 for u in users
             ],
+        )
+
+    @staticmethod
+    def _to_admin_user_item(u: User, plan_name: str | None) -> AdminUserItem:
+        """Build an AdminUserItem with the effective access state.
+
+        Mirrors app/services/access_service.py: paid (active / trialing /
+        past_due subscription) → suspended (trial expired or recorded
+        SUSPENDED) → trial.
+        """
+        import math
+        from datetime import datetime, timedelta, timezone
+
+        from app.core.config import settings
+
+        created = u.created_at
+        if created.tzinfo is None:
+            created = created.replace(tzinfo=timezone.utc)
+        ends = created + timedelta(days=settings.TRIAL_DAYS)
+        now = datetime.now(timezone.utc)  # noqa: UP017
+        days_left = max(0, math.ceil((ends - now).total_seconds() / 86400))
+
+        if plan_name is not None:
+            access_state = "paid"
+        elif u.status.value == "suspended" or now >= ends:
+            access_state = "suspended"
+        else:
+            access_state = "trial"
+
+        return AdminUserItem(
+            id=u.id,
+            full_name=u.full_name,
+            email=u.email,
+            company_name=u.company_name,
+            role=u.role.value,
+            status=u.status.value,
+            created_at=u.created_at,
+            last_login_at=u.last_login_at,
+            plan_name=plan_name,
+            access_state=access_state,
+            trial_days_left=days_left,
         )
 
     async def get_audit_logs(

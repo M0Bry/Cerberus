@@ -49,6 +49,24 @@ async def db_session() -> AsyncGenerator[AsyncSession, None]:  # noqa: UP043
         await session.rollback()
 
 
+@pytest.fixture(autouse=True)
+def _isolate_rate_limits_and_defense():
+    """The RateLimitMiddleware keeps in-memory buckets (per IP per
+    surface: login vs general) for the whole app lifetime, and the
+    3-tier defense keeps in-memory state too (abuse counters, block
+    list, IP history, behavioral baselines, metrics). Tests share the
+    app, so clear ALL of it around every test to keep them hermetic
+    (login allows 5/min per IP; 5 failed logins flag the IP)."""
+    from app.api.v1.middleware.defense_middleware import reset_defense_state
+    from app.api.v1.middleware.rate_limiter import RateLimitMiddleware
+
+    RateLimitMiddleware.reset_all()
+    reset_defense_state(app)
+    yield
+    RateLimitMiddleware.reset_all()
+    reset_defense_state(app)
+
+
 @pytest_asyncio.fixture
 async def client(
     db_session: AsyncSession,

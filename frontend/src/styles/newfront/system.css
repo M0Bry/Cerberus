@@ -1,0 +1,34 @@
+/* ============================================================
+   CERBERUS AI — system status pages (404 / 401 / 500 / 503)
+   Portrait detail card (4 : 5.5), icon-led hierarchy:
+   icon → small error tag → title → copy → actions.
+   The error code stays in the text but no longer dominates.
+   ============================================================ */
+
+.sys-panel{width:100%;max-width:440px;aspect-ratio:4 / 5.5;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px 36px;background:rgba(17,17,18,.85);border:1px solid var(--border);backdrop-filter:blur(6px);position:relative}
+.sys-panel::before{content:"";position:absolute;top:-1px;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--accent-2),var(--accent),var(--accent-2),transparent)}
+
+.sys-icon{width:72px;height:72px;display:flex;align-items:center;justify-content:center;border:1px solid var(--accent-2);background:var(--bg-input);color:var(--accent);font-size:1.6rem;margin-bottom:22px}
+.sys-tag{font-family:var(--font-display);font-size:.95rem;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--text-muted)}
+.sys-tag b{color:var(--accent);font-weight:600}
+.sys-title{font-size:1.6rem;line-height:1.1;margin-top:8px;margin-bottom:12px}
+.sys-sub{font-style:normal;font-size:var(--fs-small);line-height:1.7;color:var(--text-secondary);max-width:320px;margin:0 auto 26px}
+.sys-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.sys-actions .btn{font-size:.95rem;padding:8px 18px}
+
+@media(max-width:560px){
+  .sys-panel{aspect-ratio:auto;min-height:440px;padding:36px 24px}
+  .sys-actions{flex-direction:column;width:100%}
+  .sys-actions .btn{width:100%}
+}
+
+/* verify form inside the portrait card */
+.sys-panel .alert{width:100%;text-align:left;margin-bottom:14px}
+.sys-panel .masked-mail{font-size:var(--fs-small);color:var(--text-secondary);margin-bottom:0}
+.sys-panel .otp-row{margin:20px 0 12px;gap:10px}
+.sys-panel .otp-row input{width:44px;height:52px;font-size:1.5rem}
+.sys-panel .countdown{margin-bottom:18px;font-size:.95rem}
+.sys-panel .verify-btn{width:100%;max-width:300px}
+.sys-panel .auth-foot{margin-top:18px}
+@media(max-width:560px){.sys-panel .verify-btn{max-width:none}}
+.sys-panel .masked-mail b{font-family:var(--font-body);font-weight:700;letter-spacing:.3px;color:var(--text-primary)}

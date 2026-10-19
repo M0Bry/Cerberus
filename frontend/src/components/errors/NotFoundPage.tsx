@@ -1,21 +1,29 @@
-/**
- * 404 Not Found Page.
- */
-
-import { useNavigate } from "react-router-dom";
-import ParticleBackground from "../common/ParticleBackground";
+/** 404 Page (new design) — ported from the new front-end's 404.html. */
+import { Link } from "react-router-dom";
+import StateLink from "../common/StateLink";
+import SysPanel from "./SysPanel";
 
 export default function NotFoundPage() {
-  const navigate = useNavigate();
   return (
-    <div className="min-h-screen relative flex items-center justify-center">
-      <ParticleBackground />
-      <div className="relative z-10 text-center">
-        <h1 className="text-8xl font-bold text-cerberus-blue glow-text">404</h1>
-        <p className="text-xl text-gray-300 mt-4">Target Not Found</p>
-        <p className="text-gray-500 mt-2">The page you're looking for doesn't exist.</p>
-        <button onClick={() => navigate("/")} className="btn-glow mt-8">Return to Base</button>
-      </div>
-    </div>
+    <SysPanel
+      icon="fa-compass"
+      tag={
+        <>
+          Error <b>404</b>
+        </>
+      }
+      title="Page Not Found"
+      sub="The page you're looking for doesn't exist or may have been moved. Check the address, or head back to the platform."
+      actions={
+        <>
+          <Link to="/" className="btn btn-primary">
+            <i className="fas fa-house" /> Back to Home
+          </Link>
+          <StateLink to="/" state={{ scrollTo: "contact" }} className="btn btn-outline">
+            <i className="fas fa-headset" /> Contact Support
+          </StateLink>
+        </>
+      }
+    />
   );
 }

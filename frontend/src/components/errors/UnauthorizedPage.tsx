@@ -1,16 +1,30 @@
-/** 403 Unauthorized Page */
-import { useNavigate } from "react-router-dom";
+/** 401 Page (new design) — ported from the new front-end's unauthorized.html. */
+import { Link } from "react-router-dom";
+import SysPanel from "./SysPanel";
 
 export default function UnauthorizedPage() {
-  const navigate = useNavigate();
   return (
-    <div className="min-h-screen flex items-center justify-center bg-cerberus-dark">
-      <div className="text-center">
-        <h1 className="text-8xl font-bold text-cerberus-red">403</h1>
-        <p className="text-xl text-gray-300 mt-4">Access Denied</p>
-        <p className="text-gray-500 mt-2">You don't have permission to access this resource.</p>
-        <button onClick={() => navigate("/dashboard")} className="btn-glow mt-8">Back to Dashboard</button>
-      </div>
-    </div>
+    <SysPanel
+      icon="fa-lock"
+      tag={
+        <>
+          Error <b>401</b>
+        </>
+      }
+      title="Access Denied"
+      sub="You need to be signed in with an authorized account to view this page. If you believe this is a mistake, contact your organization's administrator."
+      backTo="/"
+      backLabel="Home"
+      actions={
+        <>
+          <Link to="/login" className="btn btn-primary">
+            <i className="fas fa-right-to-bracket" /> Log In
+          </Link>
+          <Link to="/" className="btn btn-outline">
+            <i className="fas fa-house" /> Back to Home
+          </Link>
+        </>
+      }
+    />
   );
 }

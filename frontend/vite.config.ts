@@ -10,9 +10,17 @@ export default defineConfig({
     },
   },
   server: {
+    host: "0.0.0.0",
     port: 3000,
+    // the Arena preview proxies the app under a per-session host; allow it
+    allowedHosts: true,
     proxy: {
       "/api": {
+        target: "http://localhost:8000",
+        changeOrigin: true,
+      },
+      // the backend exposes /health at the API root (not under /api/v1)
+      "/health": {
         target: "http://localhost:8000",
         changeOrigin: true,
       },

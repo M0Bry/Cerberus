@@ -58,3 +58,4 @@ htmlcov/
 # ─── Database ────────────────────────────────────────────────
 *.sqlite3
 *.db
+scripts/check_config.json

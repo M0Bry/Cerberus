@@ -4,5 +4,28 @@
     "composite": true,
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsBuildInfoFile"
   },
-  "include": ["src"]
+  "include": ["src"],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "src/pages/DashboardPage.tsx",
+    "src/pages/ConversationPage.tsx",
+    "src/pages/NewAssessmentPage.tsx",
+    "src/pages/OSINTPage.tsx",
+    "src/pages/OperationsPage.tsx",
+    "src/pages/RedTeamPage.tsx",
+    "src/pages/RiskAssessmentPage.tsx",
+    "src/pages/ScopePage.tsx",
+    "src/pages/ReportViewPage.tsx",
+    "src/pages/MonitoringPage.tsx",
+    "src/components/osint",
+    "src/components/redteam",
+    "src/components/risk",
+    "src/components/monitoring",
+    "src/components/chat",
+    "src/components/layout/DashboardLayout.tsx",
+    "src/hooks/useAdmin.ts","src/hooks/useChat.ts","src/hooks/useMonitoring.ts","src/hooks/useNotifications.ts","src/hooks/useOSINT.ts","src/hooks/useRedTeam.ts","src/hooks/useReports.ts","src/hooks/useRiskAssessment.ts","src/hooks/useScope.ts","src/hooks/useSystemHealth.ts","src/hooks/useUserProfile.ts","src/hooks/useVerifyEmail.ts","src/utils/encryption.ts",
+    "src/hooks/useAuth.ts",
+    "src/hooks/useEngagement.ts"
+  ]
 }

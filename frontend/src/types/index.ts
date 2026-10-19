@@ -11,6 +11,7 @@
 
 export * from "./user.types";
 export * from "./chat.types";
+export * from "./engagement.types";
 export * from "./osint.types";
 export * from "./redTeam.types";
 export * from "./risk.types";

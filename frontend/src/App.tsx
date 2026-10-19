@@ -1,8 +1,13 @@
+/**
+ * App — top-level providers.
+ *
+ * The new design is self-themed (newfront CSS), so the old ThemeProvider and
+ * WebSocketProvider (SSE-era leftovers) are no longer needed. A React error
+ * boundary renders the new 500 page.
+ */
 import { BrowserRouter } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ThemeProvider } from "./contexts/ThemeContext";
-import { ToastProvider } from "./components/ui/Toast";
-import { WebSocketProvider } from "./contexts/WebSocketContext";
+import ErrorBoundary from "./app/ErrorBoundary";
 import AppRouter from "./router/AppRouter";
 
 const queryClient = new QueryClient({
@@ -16,13 +21,9 @@ export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-        <ThemeProvider>
-          <WebSocketProvider>
-            <ToastProvider>
-              <AppRouter />
-            </ToastProvider>
-          </WebSocketProvider>
-        </ThemeProvider>
+        <ErrorBoundary>
+          <AppRouter />
+        </ErrorBoundary>
       </BrowserRouter>
     </QueryClientProvider>
   );

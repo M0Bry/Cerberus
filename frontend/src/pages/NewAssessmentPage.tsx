@@ -49,6 +49,7 @@ export default function NewAssessmentPage() {
               type="text"
               className="cyber-input"
               placeholder="e.g., Q3 External Security Assessment"
+              maxLength={100}
               value={projectName}
               onChange={(e) => setProjectName(e.target.value)}
             />
@@ -62,6 +63,7 @@ export default function NewAssessmentPage() {
               type="text"
               className="cyber-input"
               placeholder="e.g., Acme Corporation"
+              maxLength={100}
               value={orgName}
               onChange={(e) => setOrgName(e.target.value)}
             />
@@ -77,7 +79,7 @@ export default function NewAssessmentPage() {
 
           <button
             onClick={() => createMutation.mutate()}
-            disabled={!projectName || !orgName || createMutation.isPending}
+            disabled={!projectName.trim() || projectName.trim().length < 2 || !orgName.trim() || createMutation.isPending}
             className="btn-glow w-full text-center disabled:opacity-50"
           >
             {createMutation.isPending

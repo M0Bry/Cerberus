@@ -5,6 +5,8 @@ Engagement Endpoints — CRUD operations for penetration testing engagements.
 from fastapi import APIRouter, Depends, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from fastapi import HTTPException
+
 from app.api.deps import get_current_user
 from app.db.models.user import User
 from app.db.session import get_db
@@ -14,15 +16,18 @@ from app.schemas.engagement import (
     EngagementResponse,
     EngagementSummaryResponse,
 )
+from app.services.access_service import AccessService
 from app.services.engagement_service import EngagementService
 
 router = APIRouter()
 
 
-@router.get("/", response_model=EngagementListResponse)
+@router.get("", response_model=EngagementListResponse)
 async def list_engagements(
     page: int = Query(1, ge=1),
-    page_size: int = Query(20, ge=1, le=100),
+    # le=200: Assessments/Reports pages fetch "all my engagements" with
+    # page_size=200 — the list is scoped to the caller, so 200 is safe.
+    page_size: int = Query(20, ge=1, le=200),
     status: str | None = None,
     search: str | None = None,
     current_user: User = Depends(get_current_user),  # noqa: B008
@@ -43,7 +48,7 @@ async def list_engagements(
     )
 
 
-@router.post("/", response_model=EngagementResponse, status_code=201)
+@router.post("", response_model=EngagementResponse, status_code=201)
 async def create_engagement(
     payload: EngagementCreate,
     current_user: User = Depends(get_current_user),  # noqa: B008
@@ -55,7 +60,20 @@ async def create_engagement(
     This is the first step in starting an assessment.
     After creation, the user proceeds to the AI conversation
     to define the scope and requirements.
+
+    Access gate: suspended accounts (free trial expired with no
+    subscription) cannot start new assessments — they must pay first.
     """
+    if await AccessService(db).is_suspended(current_user):
+        raise HTTPException(
+            status_code=403,
+            detail=(
+                "Your 7-day free trial has ended and your account is "
+                "suspended. Choose a plan on the Billing page to start "
+                "new assessments."
+            ),
+        )
+
     engagement_service = EngagementService(db)
     return await engagement_service.create_engagement(
         user_id=current_user.id,

@@ -9,6 +9,7 @@ import { useState, useRef, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import { engagementService } from "../services/engagement";
+import { checkChatMessage } from "../utils/validators";
 
 /* ------------------------------------------------------------------ */
 /*  Local types                                                        */
@@ -90,6 +91,8 @@ export default function ConversationPage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!input.trim() || sendMessage.isPending) return;
+    const msgErr = checkChatMessage(input);
+    if (msgErr) return;
     sendMessage.mutate(input.trim());
   };
 
@@ -182,6 +185,7 @@ export default function ConversationPage() {
       {/* Input */}
       <div className="border-t border-cerberus-gray-700 bg-cerberus-gray-900/80 backdrop-blur-sm px-4 py-4">
         <form
+          noValidate
           onSubmit={handleSubmit}
           className="max-w-4xl mx-auto flex gap-3"
         >

@@ -1,43 +1,69 @@
-/** HeroSection — Hero (3D network + particles + logo glow + CTA). */
-import { motion } from "framer-motion";
-import { useNavigate } from "react-router-dom";
-import Network3D from "../animations/Network3D";
-import CerberusLogo from "../common/CerberusLogo";
-import TypingEffect from "../animations/TypingEffect";
+/**
+ * HeroSection — hero with breach rain, cursor spotlight and animated stats.
+ * Ported from the new front-end's index.html (hero block) + canvas effects.
+ */
+import { Link } from "react-router-dom";
+import { useAuthStore } from "../../store/useAuthStore";
+import HeroRain from "../effects/HeroRain";
+import CursorSpotlight from "../effects/CursorSpotlight";
+import CountUpValue from "./CountUpValue";
+
+const HERO_STATS = [
+  { target: 30, prefix: "+", label: "Assessment Run" },
+  { target: 103, prefix: "+", label: "Vulnerabilities Found" },
+  { target: 3, prefix: "+", label: "Organizations Protected" },
+];
 
 export default function HeroSection() {
-  const navigate = useNavigate();
+  const { isAuthenticated } = useAuthStore();
+  const cta = isAuthenticated ? "/chat" : "/register";
 
   return (
-    <section className="relative flex flex-col items-center justify-center min-h-screen px-4">
-      <div className="absolute inset-0 overflow-hidden">
-        <Network3D />
+    <section className="hero">
+      <div className="hero-bg" aria-hidden="true">
+        <HeroRain />
+        <div className="hero-blob" />
+        <CursorSpotlight />
       </div>
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
-        className="text-center relative z-10"
-      >
-        <CerberusLogo size="lg" />
-        <div className="mt-6 text-lg md:text-xl text-gray-300 max-w-2xl mx-auto">
-          <TypingEffect
-            texts={[
-              "Intelligent penetration testing powered by AI.",
-              "Automated security assessments for your organization.",
-              "AI-assisted cybersecurity analysis — all in one platform.",
-            ]}
-          />
+      <div className="hero-art-wrap">
+        <img className="hero-art" src="/assets/newfront/hero.png" alt="Cerberus — the three-headed hound" />
+      </div>
+      <div className="container">
+        <div className="hero-content">
+          <div className="hero-text fade-up">
+            <div className="hero-badge">
+              <span className="dot" /> Cyber-Security Agent
+            </div>
+            <h1>
+              The Devil
+              <br />
+              Who Chooses
+              <br />
+              <span className="gradient">Not To Dance</span>
+            </h1>
+            <p className="hero-desc">
+              Cerberus AI automates the entire penetration testing lifecycle — from OSINT and attack path planning to
+              controlled testing, risk analysis, and professional reporting. No advanced expertise required.
+            </p>
+            <div className="hero-actions">
+              <Link to={cta} className="btn btn-primary">
+                <i className="fas fa-rocket" /> Start Registration
+              </Link>
+              <a href="#how-it-works" className="btn btn-outline">
+                <i className="fas fa-play-circle" /> Discover How It Works
+              </a>
+            </div>
+            <div className="hero-stats">
+              {HERO_STATS.map((s) => (
+                <div className="hero-stat" key={s.label}>
+                  <CountUpValue target={s.target} prefix={s.prefix} className="value" initial="+0" />
+                  <div className="label">{s.label}</div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
-        <motion.button
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={() => navigate("/register")}
-          className="btn-glow mt-10 text-lg"
-        >
-          Get Started →
-        </motion.button>
-      </motion.div>
+      </div>
     </section>
   );
 }

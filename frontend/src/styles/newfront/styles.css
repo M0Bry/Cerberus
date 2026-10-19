@@ -1,0 +1,338 @@
+/* ============================================================
+   CERBERUS AI — DESIGN SYSTEM
+   Identity: charcoal + signal red, square edges, condensed
+   display type (Teko), serif body (Merriweather),
+   Chakra Petch Bold for nav + footer.
+   ============================================================ */
+
+:root{
+  --font-display:"Teko",sans-serif;
+  --font-body:"Merriweather",Georgia,serif;
+
+  --bg-primary:#1b1b1c;
+  --bg-alt:#232325;
+  --bg-card:#111112;
+  --bg-input:#0f0f10;
+
+  --accent:#cf2731;
+  --accent-2:#9d141d;
+  --blood:#7c0a12;
+  --blood-deep:#470509;
+  --ember:#ff7a45;
+  --accent-soft:rgba(157,20,29,.12);
+
+  --text-primary:#f2f2f2;
+  --text-secondary:#a3a3a6;
+  --text-muted:#76767a;
+
+  --border:#2f2f31;
+  --border-strong:#4a4a4d;
+  --warning:#f59e0b;
+
+  --ease-out:cubic-bezier(.22,.68,.32,1);
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+/* ---------- typography system ----------
+   Role tokens: use these for text roles instead of one-off sizes.
+   Display = Teko (headings, labels, nav), body = Merriweather. */
+:root{
+  --fs-page:2rem;      /* page titles (auth, dashboard) */
+  --fs-h3:1.2rem;        /* card / panel headings */
+  --fs-label:.92rem;    /* uppercase form & section labels */
+  --fs-lead:.92rem;        /* intro / lead paragraphs */
+  --fs-body:.875rem;      /* body copy, inputs */
+  --fs-small:.8rem;     /* secondary text, helper copy, alerts */
+  --fs-caption:.7rem;   /* meta, notes, tiny uppercase tags */
+  --lh-tight:1.05;       /* headings */
+  --lh-body:1.7;         /* paragraphs */
+  --ls-label:1.5px;      /* uppercase display tracking */
+}
+body{font-family:var(--font-body);font-size:14px;line-height:1.6;background:var(--bg-primary);color:var(--text-primary);overflow-x:hidden}
+img{max-width:100%}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+/* in-page nav targets land flush under the fixed navbar (scrolled height: 70px desktop, 59px mobile) */
+section{scroll-margin-top:70px}
+@media(max-width:640px){section{scroll-margin-top:59px}}
+
+.container{max-width:1280px;margin:0 auto;padding:0 24px;position:relative}
+.section{padding:64px 0 110px}
+/* translucent so the fixed ambient layer (z-index:-1) shows through;
+   composite over the body background matches the original flat tint */
+.section:nth-of-type(even){background:rgba(39,39,41,.65)}
+
+/* ----- ambient cyber background (behind everything) ----- */
+#net-canvas,.cyber-grid{position:fixed;z-index:-1;pointer-events:none}
+#net-canvas{inset:0}
+.cyber-grid{inset:-40px;background-image:linear-gradient(rgba(157,20,29,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(157,20,29,.05) 1px,transparent 1px);background-size:56px 56px;-webkit-mask-image:radial-gradient(ellipse at center,black 15%,transparent 75%);mask-image:radial-gradient(ellipse at center,black 15%,transparent 75%);will-change:transform}
+
+/* ---------- section headers ---------- */
+.section-label{display:inline-flex;align-items:center;gap:8px;font-family:var(--font-display);font-size:1.1rem;font-weight:500;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:6px}
+.section-title{font-family:var(--font-display);font-weight:600;font-size:clamp(2rem,3.4vw,2.6rem);line-height:1;letter-spacing:1px;text-transform:uppercase;color:#fff;margin-bottom:26px}
+.section-title::after{content:"";display:block;width:30px;height:6px;margin:16px auto 0;background:radial-gradient(circle,var(--accent) 2.4px,transparent 2.8px) 0 50%/10px 6px repeat-x}
+.section-desc{font-size:.95rem;font-style:italic;color:var(--text-secondary);max-width:640px;line-height:1.7}
+
+/* ---------- buttons ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:8px 22px;font-family:var(--font-display);font-size:1rem;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;border-radius:0;border:none;cursor:pointer;text-decoration:none;transition:background .3s,border-color .3s,color .3s,transform .3s,box-shadow .3s}
+.btn-primary{background:linear-gradient(135deg,var(--blood),var(--accent-2) 52%,var(--accent));color:#fff}
+.btn-primary:hover{background:linear-gradient(135deg,var(--blood-deep),var(--blood) 55%,var(--accent-2))}
+.btn-outline{background:transparent;color:var(--text-primary);border:1px solid var(--border-strong)}
+.btn-outline:hover{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn-ghost{background:transparent;color:var(--text-secondary)}
+.btn-ghost:hover{color:var(--accent)}
+
+/* ============================================================
+   NAVBAR — Chakra Petch Bold
+   ============================================================ */
+.navbar{position:fixed;top:0;left:0;right:0;z-index:1000;padding:16px 0;transition:.4s;background:transparent}
+.navbar.scrolled{background:rgba(17,17,18,.96);border-bottom:1px solid var(--border);padding:10px 0}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;gap:20px}
+.logo{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--text-primary)}
+.logo img,.logo svg{width:40px;height:40px}
+.logo-img{width:50px;height:50px;object-fit:contain;filter:brightness(1.3) saturate(1.1)}
+.footer .logo-img{width:44px;height:44px}
+.logo-text{font-family:var(--font-display);font-weight:700;font-size:1.65rem;letter-spacing:1px;text-transform:uppercase}
+.logo-text span{color:var(--accent)}
+.nav-links{display:flex;gap:6px;list-style:none}
+.nav-links a{font-family:var(--font-display);font-weight:500;color:var(--text-secondary);text-decoration:none;font-size:1rem;letter-spacing:1px;text-transform:uppercase;padding:8px 14px;transition:color .3s;white-space:nowrap}
+.nav-cta .btn{white-space:nowrap}
+.nav-links a:hover{color:var(--accent)}
+.nav-cta{display:flex;gap:12px}
+.mobile-toggle{display:none;background:none;border:none;color:var(--text-primary);font-size:1.4rem;cursor:pointer}
+
+/* mobile menu */
+.mobile-menu{position:fixed;top:0;right:-100%;width:270px;height:100vh;background:rgba(17,17,18,.98);border-left:1px solid var(--border);z-index:1100;padding:70px 22px 30px;transition:right .4s var(--ease-out)}
+.mobile-menu.open{right:0}
+.mobile-menu a{display:block;color:var(--text-secondary);text-decoration:none;padding:13px 0;font-family:var(--font-display);font-size:1.4rem;letter-spacing:1px;text-transform:uppercase;border-bottom:1px solid var(--border)}
+.mobile-menu a:hover{color:var(--accent)}
+.mobile-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:1050;opacity:0;visibility:hidden;transition:.3s}
+.mobile-overlay.open{opacity:1;visibility:visible}
+
+/* ============================================================
+   HERO
+   ============================================================ */
+/* hero ambient background: static pinstripes (on .hero) + breathing
+   glow blob + cursor-following radial spotlight, all behind content */
+.hero-bg{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+#heroRain{position:absolute;inset:0;width:100%;height:100%}
+.hero-blob{position:absolute;left:73%;top:50%;width:620px;height:620px;margin:-310px 0 0 -310px;background:radial-gradient(circle,rgba(255,122,69,.05),rgba(157,20,29,.14) 32%,transparent 66%);filter:blur(10px);animation:blobBreathe 9s ease-in-out infinite}
+@keyframes blobBreathe{0%,100%{transform:scale(1);opacity:.75}50%{transform:scale(1.16);opacity:1}}
+.hero-spot{position:absolute;left:0;top:0;width:720px;height:720px;background:radial-gradient(circle,rgba(255,122,69,.05),rgba(157,20,29,.09) 40%,rgba(157,20,29,.03) 55%,transparent 72%);transform:translate(-50%,-50%);opacity:0;transition:opacity .6s;will-change:transform}
+.hero:hover .hero-spot{opacity:1}
+@media(prefers-reduced-motion:reduce){.hero-blob{animation:none}}
+.hero{position:relative;overflow:hidden;min-height:100vh;display:flex;align-items:center;padding-top:100px;padding-bottom:60px;background:linear-gradient(rgba(27,27,28,.88),rgba(27,27,28,.96))}
+.hero .container{position:relative;z-index:2;width:100%}
+.hero-content{display:block}
+.hero-text{max-width:620px}
+.hero-badge{display:inline-flex;align-items:center;gap:10px;padding:6px 16px 6px 10px;background:none;border:1px solid var(--accent);font-family:var(--font-display);font-size:.95rem;font-weight:500;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:26px}
+.hero-badge .dot{width:8px;height:8px;background:var(--accent);transform:rotate(45deg);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+.hero h1{font-family:var(--font-display);font-size:clamp(2.3rem,4.2vw,3.4rem);font-weight:700;line-height:.95;letter-spacing:2px;text-transform:uppercase;margin-bottom:22px}
+.hero h1 .gradient{color:var(--accent);background:linear-gradient(100deg,var(--accent-2) 0%,var(--accent) 48%,var(--ember) 125%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.hero-desc{font-size:.98rem;font-style:italic;color:var(--text-secondary);max-width:500px;margin-bottom:34px}
+.hero-actions{display:flex;flex-wrap:wrap;gap:14px;margin-bottom:40px}
+.hero-stats{display:flex;gap:40px;padding-top:26px;border-top:1px solid var(--border)}
+.hero-stat .value{font-family:var(--font-display);font-size:2.4rem;font-weight:600;line-height:1;color:var(--accent)}
+.hero-stat .label{font-size:.8rem;color:var(--text-muted)}
+
+/* Hero artwork — the original 1900x1200 full-bleed canvas (new hound
+   pasted at the OLD dog's exact canvas position), rendered exactly like
+   the original design: object-fit:contain, centred. The dog therefore
+   lands in the same spot as the reference at EVERY width/aspect ratio.
+   ONE single image is used at all sizes: on phones the same canvas is
+   cropped with object-fit:cover around the dog's box (canvas x 1107-1787,
+   y 99-1088; dog centre at 76.2% / 49.5% of the canvas) so it stays
+   full-figure instead of shrinking to a 1900px-wide layout. */
+.hero-art-wrap{position:absolute;inset:0;pointer-events:none}
+.hero-art{display:block;width:100%;height:100%;object-fit:contain;object-position:center}
+
+/* ============================================================
+   FEATURES — hover lift + glow
+   ============================================================ */
+.features-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-top:50px}
+.feature-card{position:relative;background:var(--bg-card);border:1px solid var(--border);padding:34px 22px;text-align:center;transition:transform .45s var(--ease-out),border-color .45s,box-shadow .45s}
+/* glow lives OUTSIDE the card: outer box-shadow halo behind the edges,
+   card surface itself stays clean and readable */
+.feature-card:hover{transform:translateY(-10px);border-color:var(--accent);box-shadow:0 0 55px rgba(157,20,29,.34),0 0 18px rgba(255,122,69,.14),0 22px 45px rgba(0,0,0,.5)}
+.feature-icon{font-size:1.9rem;color:var(--accent);margin-bottom:14px;transition:transform .45s var(--ease-out),filter .45s}
+.feature-card:hover .feature-icon{transform:scale(1.15)}
+.feature-card h3{font-family:var(--font-display);font-size:1.5rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;transition:color .3s}
+.feature-card:hover h3{color:var(--accent)}
+.feature-card p{font-size:.9rem;color:var(--text-secondary);line-height:1.55}
+
+/* ============================================================
+   PROCESS — full-height section, hover detail panel
+   ============================================================ */
+/* full-page process section: fills viewport width & height,
+   content balanced and centered inside */
+#how-it-works{display:block}
+#how-it-works .container{max-width:none;width:100%;padding:0 clamp(24px,6vw,110px)}
+#how-it-works .section-desc{max-width:720px}
+.steps{display:grid;grid-template-columns:repeat(5,1fr);gap:clamp(20px,3vw,56px);margin-top:80px;position:relative}
+.steps::before{content:"";position:absolute;top:38px;left:8%;right:8%;height:2px;background:var(--border)}
+.step{text-align:center;position:relative;z-index:1}
+.step-number{position:relative;width:76px;height:76px;margin:0 auto 20px;background:var(--border-strong);color:var(--text-secondary);display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:2.1rem;font-weight:600;clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%);transition:color .35s,background .35s,filter .35s}
+.step-number::before,.step-number::after{content:"";position:absolute;inset:2px;clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%);z-index:-1;transition:opacity .35s}
+.step-number::before{background:var(--bg-card)}
+.step-number::after{background:linear-gradient(135deg,var(--blood-deep),var(--blood) 30%,var(--accent-2) 65%,var(--accent));opacity:0}
+.step:hover .step-number{background:var(--accent);color:#fff;filter:drop-shadow(0 0 14px rgba(157,20,29,.6)) drop-shadow(0 0 30px rgba(255,122,69,.16))}
+.step:hover .step-number::before{opacity:0}
+.step:hover .step-number::after{opacity:1}
+.step h3{font-family:var(--font-display);font-size:1.6rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px}
+.step p{font-size:.85rem;color:var(--text-muted);max-width:190px;margin:0 auto}
+
+/* ============================================================
+   WHY CERBERUS — single column (right visual removed)
+   ============================================================ */
+/* ----- Why Cerberus: original left-column layout, right side removed ----- */
+.why-grid{display:grid;grid-template-columns:1fr 1fr;gap:50px;align-items:center;margin-top:0}
+.why-content .section-title::after{margin-left:0}
+.why-list{list-style:none;margin-top:28px}
+.why-list li{display:flex;gap:14px;margin-bottom:18px}
+.why-list .check{width:26px;height:26px;background:var(--accent-soft);color:var(--accent);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.8rem}
+.why-list h4{font-family:var(--font-display);font-size:1.4rem;font-weight:600;letter-spacing:.5px;margin-bottom:3px}
+.why-list p{font-size:.88rem;color:var(--text-secondary)}
+
+/* ============================================================
+   STATS — real numbers, animated count-up
+   ============================================================ */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
+.stat-card{text-align:center;padding:40px 20px;background:var(--bg-card);border:1px solid var(--border);transition:border-color .3s,transform .3s}
+.stat-card:hover{border-color:var(--accent);transform:translateY(-4px)}
+.stat-card .number{font-family:var(--font-display);font-size:3.6rem;font-weight:600;line-height:1;color:var(--accent);margin-bottom:8px}
+.stat-card .label{font-size:.9rem;color:var(--text-secondary)}
+.stat-card .note{display:block;margin-top:6px;font-size:.72rem;font-style:italic;color:var(--text-muted)}
+
+/* ============================================================
+   PRICING — same workflow everywhere, limits differ
+   ============================================================ */
+.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:50px;align-items:stretch}
+.pricing-card{background:var(--bg-card);border:1px solid var(--border);padding:38px 28px 30px;position:relative;transition:transform .4s var(--ease-out),border-color .4s,box-shadow .4s;display:flex;flex-direction:column}
+.pricing-card:hover{transform:translateY(-8px);border-color:var(--border-strong);box-shadow:0 18px 40px rgba(0,0,0,.4)}
+.pricing-card.popular{border-color:var(--accent)}
+.pricing-card.popular::before{content:"Most Popular";position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,var(--blood),var(--accent-2) 55%,var(--accent));color:#fff;font-family:var(--font-display);font-size:1.05rem;font-weight:600;letter-spacing:1px;padding:0 16px;text-transform:uppercase}
+.plan-name{font-family:var(--font-display);font-size:1.5rem;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:#fff;margin-bottom:4px}
+.plan-price{font-family:var(--font-display);font-size:3.4rem;font-weight:600;line-height:1;color:var(--accent);margin-bottom:6px}
+.plan-price span{font-size:1rem;color:var(--text-muted)}
+.plan-desc{font-size:.86rem;font-style:italic;color:var(--text-muted);margin-bottom:22px;padding-bottom:22px;border-bottom:1px solid var(--border)}
+.plan-limits{list-style:none;margin-bottom:20px}
+.plan-limits li{display:flex;gap:10px;margin-bottom:11px;font-size:.9rem;color:var(--text-secondary)}
+.plan-limits li i{color:var(--accent);margin-top:3px;font-size:.8rem}
+.plan-limits li strong{color:var(--text-primary);font-weight:700}
+.plan-common{margin-top:auto;padding-top:18px;border-top:1px dashed var(--border-strong);font-size:.78rem;color:var(--text-muted);line-height:1.7}
+.plan-common .common-title{display:block;font-family:var(--font-display);font-size:1rem;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-secondary);margin-bottom:6px}
+.pricing-note{margin-top:34px;text-align:center;font-size:.85rem;font-style:italic;color:var(--text-muted)}
+
+/* ============================================================
+   CONTACT
+   ============================================================ */
+.contact-grid{display:grid;grid-template-columns:1fr 1.2fr;gap:40px;margin-top:40px}
+.contact-info h3{font-family:var(--font-display);font-weight:600;text-transform:uppercase;letter-spacing:1px;font-size:2.4rem;line-height:1.05;margin-bottom:12px}
+.contact-info>p{color:var(--text-secondary);margin-bottom:28px}
+.contact-item{display:flex;gap:14px;margin-bottom:20px}
+.contact-item .icon{width:40px;height:40px;background:var(--accent-soft);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--accent);flex-shrink:0}
+.contact-item h4{font-family:var(--font-display);font-size:1.25rem;font-weight:500}
+.contact-item span{font-size:.85rem;color:var(--text-muted)}
+.contact-form{background:var(--bg-card);border:1px solid var(--border);padding:32px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.form-group{margin-bottom:14px}
+.form-group label{display:block;font-family:var(--font-display);font-size:var(--fs-label);letter-spacing:1px;text-transform:uppercase;color:var(--text-secondary);margin-bottom:6px}
+.form-group input,.form-group textarea,.form-group select{width:100%;padding:12px 14px;background:var(--bg-input);border:1px solid #333;color:var(--text-primary);font-family:var(--font-body);font-size:var(--fs-body);outline:none;transition:border-color .3s}
+.form-group input:focus,.form-group textarea:focus,.form-group select:focus{border-color:var(--accent)}
+.form-group textarea{min-height:110px;resize:vertical}
+
+/* ============================================================
+   FOOTER — Chakra Petch Bold
+   ============================================================ */
+.footer{background:var(--bg-card);border-top:3px solid var(--accent);border-image:linear-gradient(90deg,transparent,var(--accent-2) 25%,var(--accent) 50%,var(--accent-2) 75%,transparent) 1;padding:70px 0 36px;position:relative;z-index:10}
+.footer-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr 1.1fr;gap:36px;margin-bottom:50px}
+.footer-brand p{color:var(--text-muted);font-size:.9rem;max-width:260px;margin:16px 0 20px;line-height:1.7}
+.social-links{display:flex;gap:10px}
+.social-links a{width:38px;height:38px;background:linear-gradient(135deg,var(--blood),var(--accent-2));display:flex;align-items:center;justify-content:center;color:#fff;text-decoration:none;transition:background .3s}
+.social-links a:hover{background:linear-gradient(135deg,var(--blood-deep),var(--blood))}
+.footer-col h4{font-family:var(--font-display);font-weight:600;font-size:1.3rem;letter-spacing:1px;text-transform:uppercase;margin-bottom:16px;color:var(--text-primary)}
+.footer-col ul{list-style:none}
+.footer-col ul li{margin-bottom:10px}
+.footer-col ul a{color:var(--text-muted);text-decoration:none;font-size:.88rem;transition:color .3s}
+.footer-col ul a:hover{color:var(--accent)}
+.footer-col>p{font-size:.88rem;color:var(--text-muted);margin-bottom:12px}
+.newsletter-form{display:flex;gap:8px}
+.newsletter-form input{flex:1;padding:11px 14px;background:var(--bg-input);border:1px solid #333;color:var(--text-primary);font-family:var(--font-body);font-size:.88rem;outline:none}
+.newsletter-form input:focus{border-color:var(--accent)}
+.newsletter-form button{padding:11px 16px;background:var(--accent);border:none;color:#fff;cursor:pointer;transition:background .3s}
+.newsletter-form button:hover{background:var(--accent-2)}
+.footer-bottom{display:flex;justify-content:space-between;align-items:center;padding-top:28px;border-top:1px solid var(--border);font-size:.78rem;color:var(--text-muted)}
+.footer-bottom-links{display:flex;gap:20px}
+.footer-bottom-links a{color:var(--text-muted);text-decoration:none}
+.footer-bottom-links a:hover{color:var(--accent)}
+
+/* ---------- reveal on scroll ---------- */
+.fade-up{opacity:0;transform:translateY(30px);transition:opacity .7s ease,transform .7s var(--ease-out)}
+.fade-up.visible{opacity:1;transform:none}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+/* the unwrapped nav needs 967px inside the container; below this the
+   desktop links collapse into the drawer instead of wrapping onto rows */
+@media(max-width:1150px){
+  .nav-links{display:none}
+  .mobile-toggle{display:block}
+  .nav-cta .btn-ghost{display:none}
+  /* pin the Sign Up button to the right, hugging the menu icon
+     (margin-left:auto absorbs the space so space-between can't center it) */
+  .nav-cta{margin-left:auto}
+}
+@media(max-width:1100px){
+  .features-grid{grid-template-columns:repeat(2,1fr)}
+  .steps{grid-template-columns:repeat(3,1fr)}
+  .steps::before{display:none}
+  .footer-grid{grid-template-columns:repeat(3,1fr)}
+}
+@media(max-width:900px){
+  .hero{flex-direction:column;align-items:stretch}
+  /* phone layout (approved responsive mockup): content stays left-aligned,
+     buttons stack full-width, stats keep their 3-up row, and the hound
+     moves BELOW the content at near-full width (tight cut, not canvas) */
+  .hero .container{order:1}
+  .hero-art-wrap{position:relative;inset:auto;width:100%;margin-top:44px;flex:none;order:2}
+  /* crop the single canvas around the dog (box ratio = dog's 680x989):
+     full-figure hound, same artwork, no second image */
+  .hero-art{width:min(92vw,430px);height:auto;aspect-ratio:680/989;object-fit:cover;object-position:76.2% 49.5%;margin:0 auto}
+  .hero-text{max-width:none}
+  .hero-desc{max-width:none;margin:0 0 34px}
+  .hero-actions{flex-direction:column;align-items:stretch}
+  .hero-actions .btn{width:100%;justify-content:center}
+  .hero-stats{justify-content:flex-start}
+  .hero-blob{left:50%;top:45%}
+  .why-grid{grid-template-columns:1fr}
+  #how-it-works{min-height:auto}
+  #how-it-works .container{padding:0 24px}
+  .contact-grid{grid-template-columns:1fr}
+  .pricing-grid{grid-template-columns:1fr;max-width:420px;margin-left:auto;margin-right:auto}
+  .stats-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:768px){
+  /* phone: navbar = logo + Sign Up + burger (Sign Up hugs the burger;
+     Log In / Get Started still live in the drawer). Buttons already
+     compact via the <=640 rule. */
+  .features-grid,.steps{grid-template-columns:1fr}
+  .steps::before{display:none}
+  .footer-grid{grid-template-columns:1fr 1fr}
+  .form-row{grid-template-columns:1fr}
+  .footer-bottom{flex-direction:column;gap:14px;text-align:center}
+}
+@media(max-width:640px){
+  .logo img,.logo svg{width:30px;height:30px}
+  .logo-img{width:38px;height:38px}
+  .logo-text{font-size:1.05rem}
+  .navbar .btn{padding:9px 14px;font-size:.7rem;letter-spacing:1px;white-space:nowrap}
+}
+@media(max-width:480px){
+  .stats-grid,.footer-grid{grid-template-columns:1fr}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  html{scroll-behavior:auto}
+}

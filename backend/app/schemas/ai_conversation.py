@@ -18,6 +18,10 @@ class ConversationMessageResponse(BaseModel):
     ai_response: str
     follow_up_questions: list[str] | None = None
     context_updated: bool = True
+    # Set to "document" when the conversation has gathered enough information
+    # and the Scope of Engagement + Rules of Engagement document is ready
+    # for the client to review and sign.
+    next_stage: str | None = None
 
 
 class MessageHistoryItem(BaseModel):

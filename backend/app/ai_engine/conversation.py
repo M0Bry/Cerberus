@@ -3,6 +3,7 @@ Cerberus AI Conversation Engine — Adaptive questioning and context building.
 """
 
 import json
+import re
 
 import structlog
 from openai import AsyncOpenAI
@@ -62,6 +63,15 @@ class CerberusAIConversation:
             Dict with 'response', 'follow_up_questions', and 'updated_context'.
         """
 
+        # ── Scripted fallback ──────────────────────────────────────────
+        # While AI models are not connected yet (no OPENAI_API_KEY), the
+        # conversation runs on a natural, guided question flow so the full
+        # product pipeline (chat → document → signature → operation) stays
+        # testable end-to-end. Replacing this with the real model is a
+        # one-line change: configure OPENAI_API_KEY.
+        if not settings.OPENAI_API_KEY:
+            return self._scripted_response(history, context)
+
         # Build messages for OpenAI
         messages = [
             {"role": "system", "content": self._build_system_prompt(organization_type)}
@@ -112,6 +122,246 @@ class CerberusAIConversation:
                 "updated_context": None,
                 "follow_up_questions": None,
             }
+
+    # ─── Scripted fallback (used until the AI models are connected) ──
+    #
+    # A natural, non-pressuring conversation: the assistant talks to the
+    # client like an experienced consultant, gathers five topics one by
+    # one, then hands over the official document for signature.
+
+    # The client's FIRST message is treated as the "organization" answer
+    # (people naturally describe their setup when they open the chat), so
+    # the scripted flow only asks the four follow-up questions below.
+    _SCRIPTED_WELCOME = (
+        "Hello, I'm Cerberus AI. Thanks for the introduction — that gives "
+        "me a good first picture of your setup. We'll take this one step at "
+        "a time; by the end I'll have the complete picture of your situation "
+        "and exactly what I can do for you. "
+    )
+
+    _SCRIPTED_QUESTIONS: list[tuple[str, str]] = [
+        (
+            "objective",
+            "Now — what's the main problem or goal behind this for you? "
+            "What do you want us to check, or what are you worried about "
+            "finding?",
+        ),
+        (
+            "exclusions",
+            "Understood. To keep everything safe, are there any systems, "
+            "accounts, or environments that must absolutely never be "
+            "touched? Think production payment systems, customer "
+            "databases, third-party services — anything we should stay "
+            "far away from.",
+        ),
+        (
+            "timeframe",
+            "Noted. When would you like this done? Is there a specific "
+            "period in mind, or windows when testing should be avoided?",
+        ),
+        (
+            "constraints",
+            "Last one — any other constraints I should know about "
+            "(legal, operational, technical)? Our default is fully "
+            "non-destructive, proof-of-concept-level testing only. "
+            "Is that what you're looking for?",
+        ),
+    ]
+
+    _SCRIPTED_DOC_READY = (
+        "Confirmed. I've prepared the official Scope of Engagement & "
+        "Rules of Engagement document — it describes exactly what we "
+        "will do, what is strictly off-limits, and the legal terms under "
+        "which the work will happen. Review it below; when you're ready, "
+        "type your full legal name to sign and authorize the engagement."
+    )
+
+    # The conversation has already produced the document: any further
+    # message is answered in "authorized" mode — never re-fires the
+    # document stage.
+    _SCRIPTED_AUTHORIZED = (
+        "Your engagement has been successfully authorized — the signed "
+        "agreement is on file and the assessment is now active. The work "
+        "proceeds automatically; you can follow its progress any time "
+        "from the Notifications page."
+    )
+
+    # Words that mean "yes, that's correct" (EN + basic AR), used to end
+    # the confirmation loop. Anything else is treated as a correction.
+    _CONFIRM_RE = re.compile(
+        r"\b(yes|yeah|yep|yup|correct|right|exactly|sure|ok|okay|okk|fine|"
+        r"good|agreed|confirmed|perfect|ready|that'?s all|that'?s right|"
+        r"sounds good|go ahead|proceed|تمام|ايوه|ايوا|اكيد|مؤكد|صح|كده|"
+        r"ممتاز|طيب)\b",
+        re.IGNORECASE,
+    )
+
+    # Starts with a negation -> the reply is a correction, no matter what
+    # confirmation words it contains ("No, not correct" must not confirm).
+    _NEGATE_RE = re.compile(
+        r"^\s*(no|nope|not|incorrect|wrong|la|مش|لا)\b", re.IGNORECASE
+    )
+
+    def _scripted_summary(self, answers: dict, corrections: list[str]) -> str:
+        """Plain-text confirmation summary of everything collected so far."""
+        lines = [
+            "Before I lock anything in, let me confirm my understanding of your situation:",
+            "",
+            f"• Your organization: {answers.get('organization', 'Not specified')}",
+            f"• What you want from this: {answers.get('objective', 'Not specified')}",
+            f"• Never to be touched: {answers.get('exclusions', 'Not specified')}",
+            f"• Timeline: {answers.get('timeframe', 'Not specified')}",
+            f"• Constraints: {answers.get('constraints', 'Not specified')}",
+        ]
+        for correction in corrections:
+            lines.append(f"• Your correction: {correction}")
+        lines.append("")
+        lines.append(
+            "Is this correct? If it is, I'll prepare the official Scope of "
+            "Engagement & Rules of Engagement document. If anything is off, "
+            "just tell me and I'll adjust."
+        )
+        return "\n".join(lines)
+
+    def _scripted_response(self, history: list[dict], context: str | None) -> dict:
+        """Guided question flow (no model required).
+
+        State is kept in the engagement context under the "scripted" key:
+        {"step": N, "answers": {...}, "corrections": [...],
+         "stage": "questions" | "summary", "complete": bool}
+
+        Flow: 5 natural questions -> the AI presents its understanding and
+        asks "is this correct?" -> the client confirms (document is
+        generated) or corrects (correction noted, understanding
+        re-presented, loop continues until a confirmation arrives).
+        """
+        user_msgs = [m for m in history if m.get("role") == "user"]
+        current = (user_msgs[-1]["content"] if user_msgs else "").strip()
+
+        try:
+            ctx = json.loads(context) if context else {}
+        except (ValueError, TypeError):
+            ctx = {}
+        if not isinstance(ctx, dict):
+            ctx = {}
+
+        script = ctx.get("scripted")
+        if not isinstance(script, dict):
+            script = {}
+        step = int(script.get("step", 0) or 0)
+        answers = script.get("answers")
+        if not isinstance(answers, dict):
+            answers = {}
+        corrections = script.get("corrections")
+        if not isinstance(corrections, list):
+            corrections = []
+        # Link the mutable containers back to the script state so every
+        # mutation below persists into the engagement context.
+        script["answers"] = answers
+        script["corrections"] = corrections
+        stage = script.get("stage")
+        if stage not in ("questions", "summary"):
+            # Older contexts without a stage key: derive it from the step.
+            stage = (
+                "summary"
+                if step >= len(self._SCRIPTED_QUESTIONS)
+                else "questions"
+            )
+
+        total = len(self._SCRIPTED_QUESTIONS)
+
+        # The document was already produced (client confirmed earlier):
+        # answer in "authorized" mode and never re-fire the stage.
+        if script.get("complete") and script.get("stage") == "summary":
+            return {
+                "response": self._SCRIPTED_AUTHORIZED,
+                "updated_context": None,
+                "follow_up_questions": None,
+            }
+
+        # --- STAGE: summary — the AI has presented its understanding and is
+        # waiting for a confirmation (or one more correction).
+        if stage == "summary":
+            if self._NEGATE_RE.search(current):
+                corrections.append(current)
+                script["corrections"] = corrections
+                ctx["scripted"] = script
+                return {
+                    "response": "Understood — correction noted. "
+                    + self._scripted_summary(answers, corrections),
+                    "updated_context": ctx,
+                    "follow_up_questions": None,
+                }
+            if self._CONFIRM_RE.search(current):
+                script["stage"] = "summary"
+                script["complete"] = True
+                ctx["scripted"] = script
+                return {
+                    "response": self._SCRIPTED_DOC_READY,
+                    "updated_context": ctx,
+                    "follow_up_questions": None,
+                    "next_stage": "document",
+                }
+            corrections.append(current)
+            script["corrections"] = corrections
+            ctx["scripted"] = script
+            return {
+                "response": "Understood — correction noted. "
+                + self._scripted_summary(answers, corrections),
+                "updated_context": ctx,
+                "follow_up_questions": None,
+            }
+
+        # --- STAGE: questions
+        # Shortcut: the client signals they're done → fill the remaining
+        # answers with defaults and jump to the confirmation summary.
+        if step >= 1 and re.search(
+            r"\b(that'?s all|thats all|done|skip)\b",
+            current,
+            re.IGNORECASE,
+        ):
+            for key, _ in self._SCRIPTED_QUESTIONS:
+                answers.setdefault(key, "Not specified")
+            script["step"] = total
+            script["stage"] = "summary"
+            ctx["scripted"] = script
+            return {
+                "response": self._scripted_summary(answers, corrections),
+                "updated_context": ctx,
+                "follow_up_questions": None,
+            }
+
+        if step == 0:
+            # First user message = the organization answer (naturally
+            # given when the user opens the chat). Greet + ask follow-up 1.
+            answers["organization"] = current
+            script["step"] = 1
+            response = self._SCRIPTED_WELCOME + self._SCRIPTED_QUESTIONS[0][1]
+        elif step < total:
+            # Save the previous question's answer, ask the next one.
+            answers[self._SCRIPTED_QUESTIONS[step - 1][0]] = current
+            script["step"] = step + 1
+            response = self._SCRIPTED_QUESTIONS[step][1]
+        else:
+            # Final answer received → present the understanding and ask for
+            # confirmation (the document is NOT generated yet).
+            answers[self._SCRIPTED_QUESTIONS[-1][0]] = current
+            script["step"] = total
+            script["stage"] = "summary"
+            ctx["scripted"] = script
+            return {
+                "response": self._scripted_summary(answers, corrections),
+                "updated_context": ctx,
+                "follow_up_questions": None,
+            }
+
+        script["stage"] = "questions"
+        ctx["scripted"] = script
+        return {
+            "response": response,
+            "updated_context": ctx,
+            "follow_up_questions": None,
+        }
 
     async def generate_summary(
         self,

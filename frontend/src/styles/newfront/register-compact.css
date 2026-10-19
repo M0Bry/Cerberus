@@ -1,0 +1,58 @@
+/* ============================================================
+   CERBERUS AI — compact horizontal register card
+   Split layout: identity column (title + photo) | compact form grid.
+   Smaller card, tighter fields, smaller type. Same tokens as the system.
+   ============================================================ */
+
+.rc-card{width:100%;max-width:860px;display:grid;grid-template-columns:300px 1fr;background:rgba(17,17,18,.85);border:1px solid var(--border);backdrop-filter:blur(6px);position:relative}
+.rc-card::before{content:"";position:absolute;top:-1px;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--accent-2),var(--accent),var(--accent-2),transparent)}
+
+/* identity column */
+.rc-side{padding:34px 32px 30px;border-right:1px solid var(--border);background:rgba(10,10,11,.6);display:flex;flex-direction:column}
+.rc-side .rc-title{font-family:var(--font-display);font-size:2.5rem;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;line-height:1;color:var(--text-primary);margin-bottom:0}
+.rc-side .rc-title::after{content:"";display:block;width:44px;height:2px;margin-top:16px;background:var(--accent)}
+.rc-sub{font-family:var(--font-body);color:var(--text-secondary);font-size:.88rem;font-style:normal;line-height:1.7;margin-top:18px;margin-bottom:0}
+.rc-photo{margin-bottom:0}
+.rc-photo > label:first-child{font-size:.82rem;margin-bottom:6px}
+.rc-photo .upload-box{flex-direction:column;gap:8px;padding:18px 12px;min-height:150px;font-size:.78rem;line-height:1.4}
+.rc-photo .upload-box i{font-size:1.5rem}
+.rc-photo .upload-box .upload-text{text-align:center}
+.rc-photo .upload-box small{display:block;font-size:.66rem;letter-spacing:.8px;color:var(--text-muted);margin-top:4px}
+.rc-side .rc-foot{margin-top:auto;padding-top:18px;border-top:1px solid var(--border);font-family:var(--font-body);font-size:.86rem;line-height:1.5;color:var(--text-muted);text-align:left}
+.rc-side .rc-foot a{font-family:var(--font-display);font-size:1.05rem;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;color:var(--accent);margin-left:4px}
+.rc-side .rc-foot a:hover{text-decoration:none;color:var(--text-primary)}
+
+/* form column */
+.rc-form{padding:30px 26px 28px;min-width:0}
+.rc-form .alert{font-size:.78rem;padding:9px 12px;margin-bottom:14px}
+.rc-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px 12px}
+.rc-span{grid-column:1 / -1}
+.rc-grid .form-group{margin-bottom:0}
+.rc-grid .form-group label{font-size:.82rem;letter-spacing:.8px;margin-bottom:4px}
+.rc-grid .form-group input{padding:8px 11px;font-size:.8rem}
+.rc-grid .pw-wrap input{padding-right:36px}
+.rc-grid .pw-toggle{right:10px;font-size:.8rem}
+.rc-submit{width:100%;margin-top:18px;padding:8px 22px;font-size:1rem}
+
+
+/* photo box lives in the right column: horizontal strip, keeps card height down */
+.rc-form .rc-photo{margin-bottom:14px}
+.rc-form .rc-photo > label:first-child{font-size:.82rem;letter-spacing:.8px;margin-bottom:4px}
+.rc-form .rc-photo .upload-box{flex-direction:row;min-height:0;padding:12px 16px;gap:14px;text-align:left}
+.rc-form .rc-photo .upload-box i{font-size:1.4rem}
+.rc-form .rc-photo .upload-box .upload-text{text-align:left;font-size:.8rem}
+.rc-form .rc-photo .upload-box small{margin-top:2px}
+
+/* responsive: stack the identity column above the form */
+@media(max-width:760px){
+  .rc-card{grid-template-columns:1fr;max-width:520px}
+  .rc-side{border-right:none;border-bottom:1px solid var(--border);padding:26px 26px 22px}
+  .rc-side .rc-title{font-size:2.1rem}
+  .rc-photo .upload-box{flex-direction:row;min-height:0;padding:12px 16px;text-align:left}
+  .rc-photo .upload-box .upload-text{text-align:left}
+  .rc-side .rc-foot{margin-top:18px;padding-top:0;border-top:none}
+  .rc-form{padding:24px 26px 26px}
+}
+@media(max-width:560px){
+  .rc-grid{grid-template-columns:1fr}
+}

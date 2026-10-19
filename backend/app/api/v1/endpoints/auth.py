@@ -3,8 +3,11 @@ Authentication Endpoints — Registration, Email Verification, Login, Token Refr
 """
 
 from fastapi import APIRouter, Depends, Request
+from fastapi.security import HTTPAuthorizationCredentials
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.api.deps import get_current_user, security_scheme
+from app.db.models.user import User
 from app.db.session import get_db
 from app.schemas.auth import (
     LoginRequest,
@@ -92,22 +95,30 @@ async def login(
 @router.post("/refresh", response_model=RefreshTokenResponse)
 async def refresh_token(
     payload: RefreshTokenRequest,
+    request: Request,
     db: AsyncSession = Depends(get_db),  # noqa: B008
 ):
     """
     Refresh an expired access token using a valid refresh token.
     """
     auth_service = AuthService(db)
-    return await auth_service.refresh_token(payload)
+    return await auth_service.refresh_token(payload, request)
 
 
 @router.post("/logout", response_model=LogoutResponse)
 async def logout(
     request: Request,
     db: AsyncSession = Depends(get_db),  # noqa: B008
+    current_user: User = Depends(get_current_user),  # noqa: B008
+    credentials: HTTPAuthorizationCredentials = Depends(security_scheme),  # noqa: B008
 ):
     """
     Invalidate the current session and log out the user.
+
+    Part D: logout now REVOKES the session in the registry — the
+    presenting access token and its refresh token both stop working
+    immediately (previously logout was a no-op and both stayed valid
+    until their JWT expiry).
     """
     auth_service = AuthService(db)
-    return await auth_service.logout(request)
+    return await auth_service.logout(request, current_user, credentials.credentials)

@@ -28,43 +28,44 @@ depends_on: str | Sequence[str] | None = None
 
 def upgrade() -> None:
     # ─── Enum Types ──────────────────────────────────────────
-    userstatus = sa.Enum("pending_verification", "verified", "suspended", "deleted", name="userstatus")  # noqa: E501
-    userrole = sa.Enum("user", "admin", "super_admin", name="userrole")  # noqa: E501
+    # IMPORTANT: labels must be the Python enum member NAMES (UPPER_SNAKE).
+    # The models declare columns as Enum(SomeClass), and SQLAlchemy's sa.Enum
+    # persists member names by default. Value-cased labels here caused
+    # "invalid input value for enum" on fresh installs.
+    userstatus = sa.Enum("PENDING_VERIFICATION", "VERIFIED", "SUSPENDED", "DELETED", name="userstatus")  # noqa: E501
+    userrole = sa.Enum("USER", "ADMIN", "SUPER_ADMIN", name="userrole")  # noqa: E501
     engagementstatus = sa.Enum(  # noqa: E501
-        "draft", "scope_defined", "rules_generated", "authorized", "initializing",  # noqa: E501
-        "osint_in_progress", "osint_complete", "attack_planning", "attack_planning_complete",  # noqa: E501
-        "red_team_in_progress", "red_team_complete", "risk_assessment",  # noqa: E501
-        "risk_assessment_complete", "report_generating", "completed", "cancelled",  # noqa: E501
+        "DRAFT", "SCOPE_DEFINED", "RULES_GENERATED", "AUTHORIZED", "INITIALIZING",  # noqa: E501
+        "OSINT_IN_PROGRESS", "OSINT_COMPLETE", "ATTACK_PLANNING", "ATTACK_PLANNING_COMPLETE",  # noqa: E501
+        "RED_TEAM_IN_PROGRESS", "RED_TEAM_COMPLETE", "RISK_ASSESSMENT",  # noqa: E501
+        "RISK_ASSESSMENT_COMPLETE", "REPORT_GENERATING", "COMPLETED", "CANCELLED",  # noqa: E501
         name="engagementstatus"  # noqa: E501
     )
-    sessionstatus = sa.Enum("intake", "scope_generation", "scope_confirmed", "in_progress", "completed", name="sessionstatus")  # noqa: E501
-    findingcategory = sa.Enum("technical", "credential", "employee", "technology", "historical_web", name="findingcategory")  # noqa: E501
-    attackpathstatus = sa.Enum("identified", "approved", "in_progress", "validated", "failed", "skipped", name="attackpathstatus")  # noqa: E501
-    severitylevel = sa.Enum("low", "medium", "high", "critical", name="severitylevel")  # noqa: E501
-    vulnerabilitystatus = sa.Enum("confirmed", "false_positive", "remediating", "remediated", "accepted_risk", name="vulnerabilitystatus")  # noqa: E501
-    risklevel = sa.Enum("low", "medium", "high", "critical", name="risklevel")  # noqa: E501
-    reportstatus = sa.Enum("generating", "generated", "signed", "delivered", name="reportstatus")  # noqa: E501
+    sessionstatus = sa.Enum("INTAKE", "SCOPE_GENERATION", "SCOPE_CONFIRMED", "IN_PROGRESS", "COMPLETED", name="sessionstatus")  # noqa: E501
+    findingcategory = sa.Enum("TECHNICAL", "CREDENTIAL", "EMPLOYEE", "TECHNOLOGY", "HISTORICAL_WEB", name="findingcategory")  # noqa: E501
+    attackpathstatus = sa.Enum("IDENTIFIED", "APPROVED", "IN_PROGRESS", "VALIDATED", "FAILED", "SKIPPED", name="attackpathstatus")  # noqa: E501
+    severitylevel = sa.Enum("LOW", "MEDIUM", "HIGH", "CRITICAL", name="severitylevel")  # noqa: E501
+    vulnerabilitystatus = sa.Enum("CONFIRMED", "FALSE_POSITIVE", "REMEDIATING", "REMEDIADED", "ACCEPTED_RISK", name="vulnerabilitystatus")  # noqa: E501
+    risklevel = sa.Enum("LOW", "MEDIUM", "HIGH", "CRITICAL", name="risklevel")  # noqa: E501
+    reportstatus = sa.Enum("GENERATING", "GENERATED", "SIGNED", "DELIVERED", name="reportstatus")  # noqa: E501
     auditaction = sa.Enum(  # noqa: E501
-        "user_registered", "user_verified", "user_login", "user_logout", "user_login_failed",  # noqa: E501
-        "password_changed", "engagement_created", "scope_defined", "rules_generated",  # noqa: E501
-        "document_signed", "document_uploaded", "assessment_started", "phase_completed",  # noqa: E501
-        "assessment_completed", "report_generated", "security_alert", "suspicious_activity",  # noqa: E501
-        "blocked_request", "admin_action", name="auditaction"  # noqa: E501
+        "USER_REGISTERED", "USER_VERIFIED", "USER_LOGIN", "USER_LOGOUT", "USER_LOGIN_FAILED",  # noqa: E501
+        "PASSWORD_CHANGED", "ENGAGEMENT_CREATED", "SCOPE_DEFINED", "RULES_GENERATED",  # noqa: E501
+        "DOCUMENT_SIGNED", "DOCUMENT_UPLOADED", "ASSESSMENT_STARTED", "PHASE_COMPLETED",  # noqa: E501
+        "ASSESSMENT_COMPLETED", "REPORT_GENERATED", "SECURITY_ALERT", "SUSPICIOUS_ACTIVITY",  # noqa: E501
+        "BLOCKED_REQUEST", "ADMIN_ACTION", name="auditaction"  # noqa: E501
     )
-    auditseverity = sa.Enum("info", "warning", "critical", name="auditseverity")  # noqa: E501
-    notificationtype = sa.Enum("info", "success", "warning", "alert", "security", name="notificationtype")  # noqa: E501
-    documentvalidationstatus = sa.Enum("pending", "validating", "passed", "failed_malware", "failed_format", "failed_size", name="documentvalidationstatus")  # noqa: E501
-    assettype = sa.Enum("domain", "subdomain", "ip_address", "web_application", "api", "cloud_resource", "mobile_app", "network_range", "other", name="assettype")  # noqa: E501
-    alerttype = sa.Enum("anomaly", "brute_force", "intrusion", "exploit_attempt", "data_exfiltration", "policy_violation", name="alerttype")  # noqa: E501
-    alertseverity = sa.Enum("critical", "high", "medium", "low", name="alertseverity")  # noqa: E501
-    alertstatus = sa.Enum("open", "investigating", "mitigated", "resolved", "false_positive", name="alertstatus")  # noqa: E501
+    auditseverity = sa.Enum("INFO", "WARNING", "CRITICAL", name="auditseverity")  # noqa: E501
+    notificationtype = sa.Enum("INFO", "SUCCESS", "WARNING", "ALERT", "SECURITY", name="notificationtype")  # noqa: E501
+    documentvalidationstatus = sa.Enum("PENDING", "VALIDATING", "PASSED", "FAILED_MALWARE", "FAILED_FORMAT", "FAILED_SIZE", name="documentvalidationstatus")  # noqa: E501
+    assettype = sa.Enum("DOMAIN", "SUBDOMAIN", "IP_ADDRESS", "WEB_APPLICATION", "API", "CLOUD_RESOURCE", "MOBILE_APP", "NETWORK_RANGE", "OTHER", name="assettype")  # noqa: E501
+    alerttype = sa.Enum("ANOMALY", "BRUTE_FORCE", "INTRUSION", "EXPLOIT_ATTEMPT", "DATA_EXFILTRATION", "POLICY_VIOLATION", name="alerttype")  # noqa: E501
+    alertseverity = sa.Enum("CRITICAL", "HIGH", "MEDIUM", "LOW", name="alertseverity")  # noqa: E501
+    alertstatus = sa.Enum("OPEN", "INVESTIGATING", "MITIGATED", "RESOLVED", "FALSE_POSITIVE", name="alertstatus")  # noqa: E501
 
-    # Create all enums
-    for enum in [userstatus, userrole, engagementstatus, sessionstatus, findingcategory,
-                 attackpathstatus, severitylevel, vulnerabilitystatus, risklevel,
-                 reportstatus, auditaction, auditseverity, notificationtype,
-                 documentvalidationstatus, assettype, alerttype, alertseverity, alertstatus]:
-        enum.create(op.get_bind(), checkfirst=True)
+    # Enum types are created automatically by op.create_table on first use
+    # (SQLAlchemy tracks created types per connection — pre-creating them here
+    # caused DuplicateObjectError on fresh installs).
 
     # ─── 1. users ────────────────────────────────────────────
     op.create_table(
@@ -79,8 +80,8 @@ def upgrade() -> None:
         sa.Column("company_location", sa.String(500), nullable=True),
         sa.Column("company_logo_url", sa.Text, nullable=True),
         sa.Column("hashed_password", sa.Text, nullable=False),
-        sa.Column("status", userstatus, nullable=False, server_default="pending_verification"),
-        sa.Column("role", userrole, nullable=False, server_default="user"),
+        sa.Column("status", userstatus, nullable=False, server_default="PENDING_VERIFICATION"),
+        sa.Column("role", userrole, nullable=False, server_default="USER"),
         sa.Column("mfa_enabled", sa.Boolean, server_default="false"),
         sa.Column("mfa_secret", sa.Text, nullable=True),
         sa.Column("registration_ip", sa.String(45), nullable=True),
@@ -151,7 +152,7 @@ def upgrade() -> None:
         sa.Column("organization_name", sa.String(500), nullable=False),
         sa.Column("objective", sa.Text, nullable=True),
         sa.Column("description", sa.Text, nullable=True),
-        sa.Column("status", engagementstatus, nullable=False, server_default="draft"),
+        sa.Column("status", engagementstatus, nullable=False, server_default="DRAFT"),
         sa.Column("progress_percentage", sa.Integer, server_default="0"),
         sa.Column("current_phase", sa.String(100), nullable=True),
         sa.Column("risk_level", sa.String(50), nullable=True),
@@ -242,7 +243,7 @@ def upgrade() -> None:
         sa.Column("file_size_bytes", sa.Integer, nullable=False),
         sa.Column("mime_type", sa.String(100), nullable=False),
         sa.Column("file_hash_sha256", sa.String(64), nullable=False),
-        sa.Column("validation_status", documentvalidationstatus, server_default="pending"),  # noqa: E501
+        sa.Column("validation_status", documentvalidationstatus, server_default="PENDING"),  # noqa: E501
         sa.Column("malware_scan_result", sa.Text, nullable=True),
         sa.Column("metadata_extracted", sa.Text, nullable=True),
         sa.Column("validation_notes", sa.Text, nullable=True),
@@ -255,7 +256,7 @@ def upgrade() -> None:
         "chat_sessions",
         sa.Column("id", sa.String(36), primary_key=True),
         sa.Column("engagement_id", sa.String(36), sa.ForeignKey("engagements.id"), index=True),  # noqa: E501
-        sa.Column("status", sessionstatus, server_default="intake"),
+        sa.Column("status", sessionstatus, server_default="INTAKE"),
         sa.Column("summary_text", sa.Text, nullable=True),
         sa.Column("scope_json", sa.Text, nullable=True),
         sa.Column("created_at", sa.DateTime(timezone=True), server_default=sa.func.now()),
@@ -324,7 +325,7 @@ def upgrade() -> None:
         sa.Column("business_impact", sa.Float, server_default="0"),
         sa.Column("confidence_score", sa.Float, server_default="0"),
         sa.Column("priority", sa.Integer, server_default="0"),
-        sa.Column("status", attackpathstatus, server_default="identified"),
+        sa.Column("status", attackpathstatus, server_default="IDENTIFIED"),
         sa.Column("result_summary", sa.Text, nullable=True),
         sa.Column("evidence", sa.Text, nullable=True),
         sa.Column("created_at", sa.DateTime(timezone=True), server_default=sa.func.now()),
@@ -371,7 +372,7 @@ def upgrade() -> None:
         sa.Column("estimated_financial_impact", sa.Text, nullable=True),
         sa.Column("remediation_steps", sa.Text, nullable=True),
         sa.Column("remediation_priority", sa.Integer, nullable=True),
-        sa.Column("status", vulnerabilitystatus, server_default="confirmed"),
+        sa.Column("status", vulnerabilitystatus, server_default="CONFIRMED"),
         sa.Column("discovered_at", sa.DateTime(timezone=True), server_default=sa.func.now()),
         sa.Column("validated_at", sa.DateTime(timezone=True), nullable=True),
     )
@@ -427,7 +428,7 @@ def upgrade() -> None:
         sa.Column("remediation_roadmap", sa.Text, nullable=True),
         sa.Column("overall_assessment", sa.Text, nullable=True),
         sa.Column("pdf_storage_path", sa.Text, nullable=True),
-        sa.Column("status", reportstatus, server_default="generating"),
+        sa.Column("status", reportstatus, server_default="GENERATING"),
         sa.Column("generated_at", sa.DateTime(timezone=True), server_default=sa.func.now()),
         sa.Column("emailed_at", sa.DateTime(timezone=True), nullable=True),
     )
@@ -439,7 +440,7 @@ def upgrade() -> None:
         sa.Column("user_id", sa.String(36), sa.ForeignKey("users.id"), index=True, nullable=True),
         sa.Column("engagement_id", sa.String(36), sa.ForeignKey("engagements.id"), index=True, nullable=True),  # noqa: E501
         sa.Column("action", auditaction, nullable=False),
-        sa.Column("severity", auditseverity, server_default="info"),
+        sa.Column("severity", auditseverity, server_default="INFO"),
         sa.Column("description", sa.Text, nullable=False),
         sa.Column("details", sa.JSON, nullable=True),
         sa.Column("ip_address", sa.String(45), nullable=True),
@@ -499,7 +500,7 @@ def upgrade() -> None:
         sa.Column("engagement_id", sa.String(36), nullable=True),
         sa.Column("related_user_id", sa.String(36), nullable=True),
         sa.Column("evidence_refs", sa.JSON, nullable=True),
-        sa.Column("status", alertstatus, server_default="open"),
+        sa.Column("status", alertstatus, server_default="OPEN"),
         sa.Column("auto_defense_actions", sa.JSON, nullable=True),
         sa.Column("assigned_to", sa.String(36), nullable=True),
         sa.Column("created_at", sa.DateTime(timezone=True), server_default=sa.func.now()),
@@ -551,7 +552,7 @@ def upgrade() -> None:
         sa.Column("id", sa.String(36), primary_key=True),
         sa.Column("user_id", sa.String(36), sa.ForeignKey("users.id"), index=True, nullable=False),
         sa.Column("engagement_id", sa.String(36), sa.ForeignKey("engagements.id"), nullable=True),  # noqa: E501
-        sa.Column("notification_type", notificationtype, server_default="info"),
+        sa.Column("notification_type", notificationtype, server_default="INFO"),
         sa.Column("title", sa.String(500), nullable=False),
         sa.Column("message", sa.Text, nullable=False),
         sa.Column("action_url", sa.Text, nullable=True),

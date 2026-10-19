@@ -1,142 +1,103 @@
 /**
- * Landing Page — PDF Pages 1-2: Complete public-facing introduction.
+ * Landing Page (new design) — ported from the new front-end's index.html.
+ *
+ * Composes: NetworkGrid backdrop, navbar, hero (breach rain + cursor
+ * spotlight), features, process, why, stats (live /public/stats), pricing,
+ * contact (POST /public/contact) and footer.
  */
-
-import { useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
-import ParticleBackground from "../components/common/ParticleBackground";
-import Network3D from "../components/animations/Network3D";
-import CerberusLogo from "../components/common/CerberusLogo";
-import TypingEffect from "../components/animations/TypingEffect";
-import CountUp from "../components/ui/CountUp";
-import AboutSection from "../components/landing/AboutSection";
-import ArchitectureSection from "../components/landing/ArchitectureSection";
-import Footer from "../components/layout/Footer";
-
-const capabilities = [
-  { title: "AI-Powered Penetration Testing", description: "Automated security assessments guided by intelligent AI agents that adapt to your organization's unique infrastructure.", icon: "🎯" },
-  { title: "Automated OSINT Collection", description: "Comprehensive open-source intelligence gathering from DNS records, certificate transparency, breach databases, and more.", icon: "🔍" },
-  { title: "Intelligent Attack Path Generation", description: "AI constructs attack graphs to identify the most probable and impactful attack scenarios against your infrastructure.", icon: "🗺️" },
-  { title: "Comprehensive Risk Analysis", description: "Technical vulnerabilities translated into measurable business risk with contextual severity analysis.", icon: "📊" },
-  { title: "Professional Report Generation", description: "Industry-standard penetration testing reports with executive summaries, detailed findings, and remediation roadmaps.", icon: "📄" },
-  { title: "Blue Team Defense Architecture", description: "Three-tier security system combining WAF, AI behavioral analysis, and generative AI for adaptive threat prevention.", icon: "🛡️" },
-];
-
-const stats = [
-  { label: "Security Assessments", value: 1247 },
-  { label: "Protected Organizations", value: 389 },
-  { label: "Vulnerabilities Discovered", value: 15632 },
-  { label: "Reports Generated", value: 892 },
-];
+import { useEffect, useRef } from "react";
+import { useLocation } from "react-router-dom";
+import NetworkGrid from "../components/effects/NetworkGrid";
+import LandingNav from "../components/landing/LandingNav";
+import HeroSection from "../components/landing/HeroSection";
+import {
+  FeaturesSection,
+  HowItWorksSection,
+  WhySection,
+  StatsSection,
+  PricingSection,
+  ContactSection,
+  LandingFooter,
+} from "../components/landing/LandingSections";
 
 export default function LandingPage() {
-  const navigate = useNavigate();
+  const rootRef = useRef<HTMLDivElement>(null);
+  const location = useLocation();
+
+  /* ── exact in-page anchor scrolling ─────────────────────────────────────
+     The section top lands FLUSH under the navbar, pixel-precise: the target
+     offset is computed from the nav's real content height at click time
+     (scrolled nav = content + 20px padding + 1px border), so it is exact on
+     every viewport — no scroll-margin guessing, no "a bit high" landing.
+     Covers the navbar links, mobile menu, hero CTA, pricing CTA, footer. */
+  const scrollExact = (id: string) => {
+    const target = document.getElementById(id);
+    if (!target) return;
+    const nav = document.getElementById("navbar");
+    const inner = nav?.querySelector(".nav-inner");
+    // content height is stable even while the padding transition runs
+    const navH = (inner ? inner.getBoundingClientRect().height : 50) + 21;
+    const top = Math.max(0, target.getBoundingClientRect().top + window.scrollY - navH);
+    window.scrollTo({ top, behavior: "smooth" });
+    history.replaceState(null, "", `#${id}`);
+  };
+
+  useEffect(() => {
+    const onAnchorClick = (e: MouseEvent) => {
+      const a = (e.target as HTMLElement | null)?.closest?.('a[href^="#"]');
+      if (!a) return;
+      const id = a.getAttribute("href")?.slice(1) || "";
+      if (!id || !document.getElementById(id)) return; // plain "#" keeps native behaviour
+      e.preventDefault();
+      scrollExact(id);
+    };
+    document.addEventListener("click", onAnchorClick);
+    return () => document.removeEventListener("click", onAnchorClick);
+  }, []);
+
+  /* deep-link support: {state: {scrollTo: "contact"}} (used by the 404 page) */
+  useEffect(() => {
+    const target = (location.state as { scrollTo?: string } | null)?.scrollTo;
+    if (!target) return;
+    const t = window.setTimeout(() => scrollExact(target), 250);
+    return () => window.clearTimeout(t);
+  }, [location.state]);
+
+  /* reveal-on-scroll for every .fade-up element (matches js/main.js behaviour) */
+  useEffect(() => {
+    const root = rootRef.current;
+    if (!root) return;
+    const els = Array.from(root.querySelectorAll<HTMLElement>(".fade-up"));
+    if (!els.length) return;
+    const obs = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            e.target.classList.add("visible");
+            obs.unobserve(e.target);
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+    els.forEach((el) => obs.observe(el));
+    return () => obs.disconnect();
+  }, []);
 
   return (
-    <div className="min-h-screen relative overflow-hidden">
-      <ParticleBackground />
-
-      {/* ─── Hero Section ────────────────────── */}
-      <section className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4">
-        <div className="absolute inset-0 overflow-hidden">
-          <Network3D />
-        </div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="text-center relative z-10"
-        >
-          <CerberusLogo size="lg" />
-
-          <div className="mt-6 text-lg md:text-xl text-gray-300 max-w-2xl mx-auto leading-relaxed">
-            <TypingEffect
-              texts={[
-                "Intelligent penetration testing powered by AI.",
-                "Automated security assessments for your organization.",
-                "AI-assisted cybersecurity analysis — all in one platform.",
-              ]}
-            />
-          </div>
-
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={() => navigate("/register")}
-            className="btn-glow mt-10 text-lg"
-          >
-            Registration Started →
-          </motion.button>
-        </motion.div>
-
-        {/* Scroll indicator */}
-        <motion.div
-          animate={{ y: [0, 10, 0] }}
-          transition={{ repeat: Infinity, duration: 2 }}
-          className="absolute bottom-10 text-cerberus-blue/50 z-10"
-        >
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-          </svg>
-        </motion.div>
-      </section>
-
-      {/* ─── Capabilities Section ── */}
-      <section className="relative z-10 py-24 px-4 max-w-7xl mx-auto">
-        <motion.h2
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          className="text-3xl md:text-4xl font-bold text-center mb-16"
-        >
-          <span className="text-gradient">Platform Capabilities</span>
-        </motion.h2>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {capabilities.map((cap, i) => (
-            <motion.div
-              key={cap.title}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.1 }}
-              className="cyber-card group cursor-default"
-            >
-              <span className="text-4xl mb-4 block group-hover:scale-110 transition-transform">{cap.icon}</span>
-              <h3 className="text-xl font-semibold text-white mb-2">{cap.title}</h3>
-              <p className="text-gray-400 text-sm leading-relaxed">{cap.description}</p>
-            </motion.div>
-          ))}
-        </div>
-      </section>
-
-      {/* ─── Stats Section ── */}
-      <section className="relative z-10 py-24 px-4 bg-cerberus-gray-900/50">
-        <div className="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8">
-          {stats.map((stat) => (
-            <motion.div
-              key={stat.label}
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              className="text-center"
-            >
-              <CountUp target={stat.value} className="text-4xl md:text-5xl font-bold text-cerberus-blue glow-text" />
-              <p className="mt-2 text-sm text-gray-400">{stat.label}</p>
-            </motion.div>
-          ))}
-        </div>
-      </section>
-
-      {/* ─── About Section ── */}
-      <AboutSection />
-
-      {/* ─── Architecture Section ── */}
-      <ArchitectureSection />
-
-      {/* ─── Footer ── */}
-      <Footer />
+    <div ref={rootRef} className="landing-root">
+      <NetworkGrid />
+      <LandingNav />
+      <main>
+        <HeroSection />
+        <FeaturesSection />
+        <HowItWorksSection />
+        <WhySection />
+        <StatsSection />
+        <PricingSection />
+        <ContactSection />
+      </main>
+      <LandingFooter />
     </div>
   );
 }

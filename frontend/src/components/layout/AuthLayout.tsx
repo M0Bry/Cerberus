@@ -1,60 +1,38 @@
 /**
- * AuthShell — Exact auth card shell from the reference design.
+ * AuthLayout — shared wrapper for the auth pages (new design).
+ *
+ * Mirrors the new front-end's auth pages markup:
+ *   .auth-glow + AuthEmbers canvas behind, .auth-wrap with logo + back link
+ *   and the page panel (children).
  */
 import { ReactNode } from "react";
-import Navbar from "./Navbar";
-import Footer from "./Footer";
-import ParticleBackground from "../common/ParticleBackground";
-
-const MONO = "'Share Tech Mono', 'Courier New', monospace";
+import { Link } from "react-router-dom";
+import AuthEmbers from "../effects/AuthEmbers";
 
 interface AuthLayoutProps {
   children: ReactNode;
-  width?: number;
+  /** Where the "back" link points. Defaults to the login page. */
+  backTo?: string;
+  backLabel?: string;
 }
 
-export default function AuthLayout({ children, width = 460 }: AuthLayoutProps) {
+export default function AuthLayout({ children, backTo = "/login", backLabel = "Log In" }: AuthLayoutProps) {
   return (
-    <div
-      style={{
-        background: "#03060c",
-        color: "#e8edf7",
-        minHeight: "100vh",
-        fontFamily: MONO,
-        position: "relative",
-        display: "flex",
-        flexDirection: "column",
-      }}
-    >
-      <ParticleBackground />
-      <Navbar />
-      <div
-        style={{
-          position: "relative",
-          zIndex: 1,
-          flex: 1,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          padding: "48px 24px",
-        }}
-      >
-        <div
-          className="fade-up"
-          style={{
-            width: "100%",
-            maxWidth: width,
-            background: "#0a101c",
-            border: "1px solid #152238",
-            borderRadius: 18,
-            padding: "36px 34px",
-            boxShadow: "0 30px 80px -40px rgba(0,0,20,0.8)",
-          }}
-        >
-          {children}
-        </div>
+    <>
+      <div className="auth-glow" aria-hidden="true" />
+      <AuthEmbers />
+      <div className="auth-wrap">
+        <Link to="/" className="auth-logo">
+          <img src="/assets/newfront/logo-cerberus.png" alt="Cerberus AI" />
+          <div className="logo-text">
+            Cerberus<span>AI</span>
+          </div>
+        </Link>
+        <Link to={backTo} className="auth-back">
+          <i className="fas fa-arrow-left" /> {backLabel}
+        </Link>
+        {children}
       </div>
-      <Footer />
-    </div>
+    </>
   );
 }

@@ -1,16 +1,28 @@
-/** 500 Server Error Page */
-import { useNavigate } from "react-router-dom";
+/** 500 Page (new design) — ported from the new front-end's server-error.html. */
+import { Link } from "react-router-dom";
+import SysPanel from "./SysPanel";
 
 export default function ServerErrorPage() {
-  const navigate = useNavigate();
   return (
-    <div className="min-h-screen flex items-center justify-center bg-cerberus-dark">
-      <div className="text-center">
-        <h1 className="text-8xl font-bold text-cerberus-red">500</h1>
-        <p className="text-xl text-gray-300 mt-4">Internal Server Error</p>
-        <p className="text-gray-500 mt-2">Something went wrong on our end. Please try again later.</p>
-        <button onClick={() => navigate("/")} className="btn-glow mt-8">Return Home</button>
-      </div>
-    </div>
+    <SysPanel
+      icon="fa-triangle-exclamation"
+      tag={
+        <>
+          Error <b>500</b>
+        </>
+      }
+      title="Server Error"
+      sub="Something went wrong on our side. The incident has been logged and our team has been notified. Please try again in a few moments."
+      actions={
+        <>
+          <button type="button" className="btn btn-primary" onClick={() => window.location.reload()}>
+            <i className="fas fa-rotate-right" /> Try Again
+          </button>
+          <Link to="/" className="btn btn-outline">
+            <i className="fas fa-house" /> Back to Home
+          </Link>
+        </>
+      }
+    />
   );
 }

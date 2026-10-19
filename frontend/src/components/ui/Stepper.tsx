@@ -1,7 +1,6 @@
 /**
  * Stepper — Step indicator matching the reference design.
  */
-import { CheckCircle2 } from "lucide-react";
 
 const DISPLAY = "'Orbitron', 'Share Tech Mono', sans-serif";
 const MONO = "'Share Tech Mono', 'Courier New', monospace";

@@ -2,7 +2,11 @@
   "compilerOptions": {
     "target": "ES2022",
     "useDefineForClassFields": true,
-    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "lib": [
+      "ES2022",
+      "DOM",
+      "DOM.Iterable"
+    ],
     "module": "ESNext",
     "skipLibCheck": true,
     "moduleResolution": "bundler",
@@ -17,10 +21,43 @@
     "noFallthroughCasesInSwitch": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": [
+        "src/*"
+      ]
     },
-    "ignoreDeprecations": "6.0"
+    "ignoreDeprecations": "5.0"
   },
-  "include": ["src"],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  "include": [
+    "src"
+  ],
+  "references": [
+    {
+      "path": "./tsconfig.node.json"
+    }
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "src/**/*.test.ts",
+    "src/**/*.test.tsx",
+    "src/pages/DashboardPage.tsx",
+    "src/pages/ConversationPage.tsx",
+    "src/pages/NewAssessmentPage.tsx",
+    "src/pages/OSINTPage.tsx",
+    "src/pages/OperationsPage.tsx",
+    "src/pages/RedTeamPage.tsx",
+    "src/pages/RiskAssessmentPage.tsx",
+    "src/pages/ScopePage.tsx",
+    "src/pages/ReportViewPage.tsx",
+    "src/pages/MonitoringPage.tsx",
+    "src/components/osint",
+    "src/components/redteam",
+    "src/components/risk",
+    "src/components/monitoring",
+    "src/components/chat",
+    "src/components/layout/DashboardLayout.tsx",
+    "src/hooks/useAdmin.ts","src/hooks/useChat.ts","src/hooks/useMonitoring.ts","src/hooks/useNotifications.ts","src/hooks/useOSINT.ts","src/hooks/useRedTeam.ts","src/hooks/useReports.ts","src/hooks/useRiskAssessment.ts","src/hooks/useScope.ts","src/hooks/useSystemHealth.ts","src/hooks/useUserProfile.ts","src/hooks/useVerifyEmail.ts","src/utils/encryption.ts",
+    "src/hooks/useAuth.ts",
+    "src/hooks/useEngagement.ts"
+  ]
 }

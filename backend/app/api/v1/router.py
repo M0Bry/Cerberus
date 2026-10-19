@@ -5,7 +5,9 @@ API v1 Router — Aggregates all endpoint routers under /api/v1.
 from fastapi import APIRouter
 
 from app.api.v1.endpoints import (
+    access,
     admin,
+    admin_auth,
     ai_conversation,
     attack_planning,
     auth,
@@ -15,6 +17,8 @@ from app.api.v1.endpoints import (
     engagements,
     notifications,
     osint,
+    payments,
+    public,
     red_team,
     reports,
     risk_assessment,
@@ -130,9 +134,40 @@ api_v1_router.include_router(
     tags=["Blue Team Defense"],
 )
 
+# ─── Payments (Stripe) ───────────────────────────────────────
+api_v1_router.include_router(
+    payments.router,
+    prefix="/payments",
+    tags=["Payments"],
+)
+
+# ─── Access (trial / paid / suspended) ────────────────────────
+api_v1_router.include_router(
+    access.router,
+    prefix="/access",
+    tags=["Access"],
+)
+
 # ─── Admin ────────────────────────────────────────────────────
+# admin_auth: the hidden, 2FA-hardened admin login (separate from the
+# standard /auth/login — admin accounts are rejected there).
+api_v1_router.include_router(
+    admin_auth.router,
+    prefix="/admin",
+    tags=["Admin"],
+)
+
 api_v1_router.include_router(
     admin.router,
     prefix="/admin",
     tags=["Admin"],
+)
+
+# ─── Public (landing stats, contact form) ─────────────────────
+# Was written but never mounted — the front-end landing page calls
+# both endpoints, so this wiring fix is required for them to work.
+api_v1_router.include_router(
+    public.router,
+    prefix="/public",
+    tags=["Public"],
 )

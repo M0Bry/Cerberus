@@ -26,6 +26,10 @@ class AdminUserItem(BaseModel):
     status: str
     created_at: datetime
     last_login_at: datetime | None
+    # Access state (trial / paid / suspended) — drives the "Plan" column.
+    plan_name: str | None = None
+    access_state: str = "trial"
+    trial_days_left: int = 0
 
 
 class UserManagementListResponse(BaseModel):

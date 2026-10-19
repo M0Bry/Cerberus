@@ -3,6 +3,7 @@ Audit Log Model — Comprehensive activity logging for security and compliance.
 """
 
 import enum
+import uuid
 from datetime import datetime, timezone
 
 from sqlalchemy import JSON, DateTime, Enum, ForeignKey, String, Text
@@ -45,7 +46,11 @@ class AuditLog(Base):
 
     __tablename__ = "audit_logs"
 
-    id: Mapped[str] = mapped_column(String(36), primary_key=True, index=True)
+    # Services create AuditLog rows without an explicit id — default to UUID
+    # here (previously caused NOT NULL violations on every audited action).
+    id: Mapped[str] = mapped_column(
+        String(36), primary_key=True, index=True, default=lambda: str(uuid.uuid4())
+    )
     user_id: Mapped[str | None] = mapped_column(
         String(36), ForeignKey("users.id"), index=True, nullable=True
     )
